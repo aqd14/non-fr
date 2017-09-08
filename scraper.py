@@ -104,6 +104,35 @@ def scrape_ml(id):
             description = comment
     
     return Issue(id, title, description, attachments_content)
+
+def scrape(system, ids):
+    """Scrape a list of issues given the id range.
+    
+    Args:
+        system (str): The specified system. The prefix url will be determined given the system
+                Currently support Firefox and Mylyn.
+        ids (list): id range
+        
+    Return:
+        issues: A list of scraped issues
+        
+    """
+    issues = []
+    system = system.upper()
+    # If user want to scrape data within a range of ids
+    if len(ids) == 2:
+       for id in range(ids[0], ids[1] + 1):
+            if system == 'FIREFOX':
+                issue = scrape_ff(id)
+            elif system == 'MYLYN':
+                issue = scrape_ml(id)
+            else:
+                raise RuntimeError('System is unsupported: ' + system)
+            issues.append(issue)
+    else:
+        raise RuntimeError('Please specify the ids range you want to scrape!')
+    
+    return issues
    
 def to_xml(issues):
     for issue in issues:
