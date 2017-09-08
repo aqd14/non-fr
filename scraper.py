@@ -99,10 +99,11 @@ def scrape_ml(_id):
     # if the reporter is also the first commenter
     comments = soup.find_all(class_='bz_comment')
     if len(comments) > 0:
-        reporter = soup.find(id='bz_show_bug_column_2').find(class_='fn').text
+        reporter = soup.find(id='bz_show_bug_column_2').find(class_='vcard').text
+        reporter = reporter.replace('\n', '').strip() # re-format reporter name
         # print('Reporter: %s' % reporter)
-        first_commenter = comments[0].find(class_='fn').text
-        # print('First commenter: %s' % first_commenter)
+        first_commenter = comments[0].find(class_='vcard').text
+        first_commenter = first_commenter.replace('\n', '').strip() # re-format commenter name
         
         if first_commenter == reporter: # get issue description if the first commenter is also reporter
             comment = comments[0].find(class_='bz_comment_text').text
@@ -200,8 +201,3 @@ def to_xml(f, system, issues):
     # write to file
     tree = etree.ElementTree(element=root)
     tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
-    
-system = 'Firefox'
-id_range = [200001, 200010]
-issues = scrape(system, id_range)
-to_xml('data/issues.xml', system, issues)
