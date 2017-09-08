@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <system>Firefox</system>
+  <issues>
+    <issue>
+      <id>200001</id>
+      <title>Rewrite nsMsgDBView::GetLevelInUnreadView</title>
+      <description>So i ended up in an infinite loop in nsMsgDBView::GetLevelInUnreadView
+
+I couldn't figure out what the function was doing, so i rewrote it.
+
+that made it at least comprehensible, and then dmose suggested that 
+     m_db-&gt;GetMsgHdrForKey(parentKey, getter_AddRefs(curMsgHdr));
+was probably failing.
+
+he was right.</description>
+      <attachments>
+        <attach>rewrite</attach>
+        <attach>as before, removes dead code including levelStack</attach>
+        <attach>-w</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200002</id>
+      <title>bookmarks.js :  missing semicolon in line #98 ?</title>
+      <description>User-Agent:       Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.4a) Gecko/20030329
+Build Identifier: Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.4a) Gecko/20030329
+
+http://lxr.mozilla.org/seamonkey/source/xpfe/components/bookmarks/resources/bookmarks.js#95
+
+74 function initServices()
+...
+ 
+ 95   kPREFContractID  = "@mozilla.org/preferences-service;1";
+ 96   kPREFIID         = Components.interfaces.nsIPrefService;
+ 97   PREF             = Components.classes[kPREFContractID].getService(kPREFIID)
+ 98                                .getBranch(null)
+ 99 
+100   kSOUNDContractID = "@mozilla.org/sound;1";
+101   kSOUNDIID        = Components.interfaces.nsISound;
+102   SOUND            =
+Components.classes[kSOUNDContractID].createInstance(kSOUNDIID);
+103 
+
+Reproducible: Always
+
+Steps to Reproduce:
+
+
+
+
+
+If it was C, I would tell there is a ; missing, but it isn´t C.</description>
+      <attachments>
+        <attach>Patch</attach>
+        <attach>updated patch</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200003</id>
+      <title>Form fails to display on page</title>
+      <description>User-Agent:       Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.3) Gecko/20030312
+Build Identifier: Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.3) Gecko/20030312
+
+A page required to set up a new meeting does not display properly.  All the form
+fields are missing with Mozilla 1.3 but they display properly with IE6.
+
+Reproducible: Always
+
+Steps to Reproduce:
+1.Requires a login so I can't give you a url but it always fails.
+2.
+3.
+
+Actual Results:  
+I will attach the source for a page that displays a bar with "New Meeting" on
+the top, followed by some empty white space followed by a bar with 3 buttons
+"Create", "Cancel" and "Help".  The cancel and help button work as they should,
+but the Create button requires a form to be filled in, but that form does not
+display.
+
+Expected Results:  
+A form that allows some information to be entered regarding the time, place and
+description of a meeting is displayed when the page is accessed by IE 6.</description>
+      <attachments>
+        <attach>Form that loads successfully into IE but fails to display boxes in Mozilla 1.3</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200004</id>
+      <title>"match only previously typed sites" autocomplete pref doesn't work     (type in location bar and nothing is matched)</title>
+      <description>found using 2003.03.31 on all platforms. not sure if this pref ever worked.
+
+1. go to the Smart Browsing pref panel and make sure the checkbox for
+"Automatically complete text typed in the Location bar" is enabled.
+
+2. click on the Advanced button.
+
+3. make sure these three options are enabled (checked):
+
+a. "autcomplete best match as you type"
+b. "show list of matching results"
+c. "match only websites you've typed previously"
+
+4. click OK, OK to save and dismiss prefs.
+
+5. open a new browser window.
+
+6. go to the urlbar and enter supersnail.com.
+
+7. once that site loads, click on a link or two.
+
+8. close that window and open another one.
+
+9. go to the urlbar and start typing supersnail.com...
+
+expected: due to (a), autcomplete should prefill "supersnail.com" in the urlbar.
+due to (b) a droplist should also appear that contains "supersnail.com". and,
+because of (c), the other links visited at supersnail.com should not appear at all.
+
+actual results: neither prefilling of the urlbar nor an autocomplete droplist
+appear at all.</description>
+      <attachments>
+        <attach>Fix</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200005</id>
+      <title>pk12util displays the user's password in plain text, twice</title>
+      <description>Observe the following output from a run of the pk12util utility, reported in
+the n.p.m.crypto newsgroup:
+
+&gt; &gt;&gt;pk12util -i "my.p12" -d "my directory" -v
+&gt; &gt;
+&gt; &gt; Enter Password or Pin for "NSS Certificate DB": *****
+&gt; &gt; Enter password for PKCS12 file: *****
+&gt; &gt; Converted from:
+&gt; &gt; 73 77 61 6d 70 66 6f 78 31 31  0
+&gt; &gt; Converted to:
+&gt; &gt;  0 73  0 77  0 61  0 6d  0 70  0 66  0 6f  0 78  0 31  0 31  0  0 
+
+Those last 4 lines show the user's password twice, once in UTF-8 and 
+a second time in UCS-2.  This serves no useful purpose, and is a security
+flaw.  The code that prints those 4 lines of output should be removed.</description>
+      <attachments>
+        <attach>ifdef out offending code and remove some dead code.</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200006</id>
+      <title>cannot dismiss alert when accessing a bogus url via open web location (target=current window or new tab, new window works fine)</title>
+      <description>found using 2003.03.31.03 comm bits on mac 10.2.4. not a problem on win2k or
+linux. this is a recent regression, as it works fine in the 2003.03.25.03 build.
+
+1. bring up the Open Web Location dialog (cmd+shift+L).
+2. select "New Navigator Tab" from the droplist.
+3. enter a bogus url in the location textfield (eg, foo.foo.foo).
+4. click the Open button.
+5. you'll get an alert (sheet) saying that the url is invalid --click OK to
+dismiss the alert.
+
+results: the alert sheet won't go away. with the exception of the apple and
+application menu, the entire menubar is disabled. you can only quit the app.</description>
+      <attachments>
+        <attach>Sampler data showing stacks for thread deadlock</attach>
+        <attach>proposed fix, plus comment cleanup</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200007</id>
+      <title>add option to flush ldapsearch output after each entry</title>
+      <description>Currently, when attempting to capture the output to a file, of a persistent
+search when using ldapsearch with the -C option, ldapsearch uses block buffering
+of output, instead of line buffering. This means that at least 8192 bytes of
+data need to be sent to the output before it is flushed out. 
+
+It would be very helpful if there was an option to cause ldapsearch to perform
+line buffering of output, so that every line of output was flushed.</description>
+      <attachments>
+        <attach>proposed fix</attach>
+        <attach>revised fix: add an option for this (-r)</attach>
+        <attach>final fix</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200008</id>
+      <title>Can not display local directory/files properly</title>
+      <description>Build: 03-31 trunk build / Mac 10.2.4
+
+Steps to reproduce:
+1. Create some non-ascii directory/file names under &lt;OS X&gt;.
+2. Launch browser and open a file under &lt;OS X&gt; or a non-ascii directory.
+
+Result:
+The non-ascii characters are not displayed correctly no matter what charset you
+select.
+
+Note: 
+- if you open a file or directory under &lt;OS X&gt;, the &lt;OS X&gt; is not showed in URL
+bar, it always show as file:///&lt;file or directory name&gt;.
+- IE, Safari have different behavior when open local file, so this problem not
+reproduce there.
+- It also can not reproduce on N7.02 because the behavior is different too.</description>
+      <attachments>
+        <attach>
+screen shot for an example
+            </attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200009</id>
+      <title>classic privacy dialog icon is a modern picture</title>
+      <description>actual results, picture looks like:
+http://lxr.mozilla.org/seamonkey/source/extensions/cookie/resources/skin/modern/status-cookie.gif
+
+expected results, a picture of classic with that widget.</description>
+      <attachments>
+        <attach>
+newclassic
+            </attach>
+        <attach>
+Classic status-cookie.gif
+            </attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>200010</id>
+      <title>plain-text editor mangles blank lines</title>
+      <description>User-Agent:       Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3) Gecko/20030312
+Build Identifier: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3) Gecko/20030312
+
+this bug report will suck because i can't reproduce it, yet it happens
+all the time.
+
+1) after sending a spanking new plain-text message, many of the
+blank lines that separate my paragraphs are lost.  i know this
+because i receive a copy of the message.  i believe the mangling
+isn't done by an MTA because the copy of the message in my 'Sent'
+folder appears the same as the copy I received from the MTA.
+
+2) if i "edit as new" one of these received, mangled messages, the
+line ends and spacing are changed even more.
+
+note that my mail store is a lotus notes IMAP instance (shudder, yes,
+i'm in hell and i know it).  note also that this happens when
+i've set the wrap length to 0 (for displayed messages) and for
+the wrap length set to 1,000.  
+
+Reproducible: Sometimes
+
+Steps to Reproduce:
+1.
+2.
+3.
+
+
+
+Expected Results:  
+honor my blank lines and line lengths.
+
+just tell me i'm not insane and i'll go away.</description>
+      <attachments/>
+    </issue>
+  </issues>
+</root>
