@@ -12,66 +12,36 @@ from issue import Issue
 
 FIREFOX_URL_PREFIX = 'https://bugzilla.mozilla.org/show_bug.cgi?id='
 MYLYN_URL_PREFIX = 'https://bugs.eclipse.org/bugs/show_bug.cgi?id='
+DUPLICATED_ISSUES = ["RESOLVED DUPLICATE", "VERIFIED DUPLICATE"] # ignore duplicate issues
 
-def scrape_ff(_id):
-    """
-    Scrape Firefox issues
-    """
-    '''
-    if len(ids) == 1:
-        
-    elif len(ids) == 2:
-        
-    else:
-    '''
-    url = FIREFOX_URL_PREFIX + str(_id)
-    print('Scraping url: %s' % url)
-    result = requests.get(url)
-    
-    # Can't access the url
-    if result.status_code != 200:
-        print('Can\'t access url!')
-        return
-    c = result.content
-    soup = BeautifulSoup(c, 'lxml')
-    # print(soup.header)
-    # bs = soup.find_all('h1')
-    # print(bs)
-    title = soup.find(id="field-value-short_desc").text
-    # print(title)
-    description = ''
-    
-    # Attachments description might reveal some important information about the issue
-    attachments_content = []
-    attachments = soup.find(id='attachments')
-    if attachments: # if there are some attachments
-        attachments = attachments.find_all(class_='attach-desc')
-        for attach in attachments:
-            attachments_content.append(attach.a.text)
-    
-    # make an assumption that the reporter will make a more detailed description
-    # with the first comment. Consider the first comment as a part of description
-    # if the reporter is also the first commenter
-    comments = soup.find_all(id=re.compile('^c\d+$'))
-    if len(comments) > 0:
-        reporter = soup.find(id='field-reporter').find(class_='fna').text
-        # print('Reporter: %s' % reporter)
-        first_commenter = comments[0].find(class_='fna').text
-        # print('First commenter: %s' % first_commenter)
-        
-        if first_commenter == reporter: # get issue description if the first commenter is also reporter
-            comment = comments[0].find(class_='comment-text').text
-            # print('Comment: %s' % comment)
-            description = comment
-    
-    print('Completed!\n')
-    return Issue(str(_id), title, description, attachments_content)
+firefox_attributes = {'status-id':'field-value-status_summary', 'title-id':'field-value-short_desc',
+                      'attachment-id':'attachments', 'attachment-regex':'^attach-desc$',
+                      'comment-regex':'^c\d$', 'reporter-id':'field-reporter', 'reporter-class':'fna',
+                      'commenter-class':'fna', 'comment-text-class':'comment-text'
+                      }
 
-def scrape_ml(_id):
+mylyn_attributes = {'status-id':'bz_field_status', 'title-id':'short_desc_nonedit_display',
+                      'attachment-id':'attachment_table', 'attachment-regex':'^bz_contenttype+$',
+                      'comment-regex':'^c\d$', 'reporter-id':'bz_show_bug_column_2', 'reporter-class':'vcard',
+                      'commenter-class':'vcard', 'comment-text-class':'bz_comment_text'
+                      }
+
+def scrape_issue(url_prefix, _id, attributes):
+    # extract necessary html attributes from dictionary
+    status_id = attributes['status-id']
+    title_id = attributes['title-id']
+    attachment_id = attributes['attachment-id']
+    attachment_regex = attributes['attachment-regex']
+    comment_regex = attributes['comment-regex']
+    reporter_id = attributes['reporter-id']
+    reporter_class = attributes['reporter-class']
+    commenter_class = attributes['commenter-class']
+    comment_text_class = attributes['comment-text-class']
+    
     """ 
     Scrape Mylyn issues
     """
-    url = MYLYN_URL_PREFIX + str(_id)
+    url = url_prefix + str(_id)
     print('Scraping url: %s' % url)
     result = requests.get(url)
     # Can't access the url
@@ -80,35 +50,62 @@ def scrape_ml(_id):
         return
     c = result.content
     soup = BeautifulSoup(c, 'lxml')
-    title = soup.find(id='short_desc_nonedit_display').text
-    # print(title)
-    description = ""
     
-    # Attachments description might reveal some important information about the issue
-    # Include all obsolete attachments
-    attachments_content = []
-    attachments = soup.find(id='attachment_table')
-    if attachments: # if there is attachment
-        attachments = attachments.find_all(id=re.compile("^a\d+$"))
-        if len(attachments) > 1:
-            for attach in attachments[1:]:
-                attachments_content.append(attach.b.text)
-    
-    # make an assumption that the reporter will make a more detailed description
-    # with the first comment. Consider the first comment as a part of description
-    # if the reporter is also the first commenter
-    comments = soup.find_all(class_='bz_comment')
-    if len(comments) > 0:
-        reporter = soup.find(id='bz_show_bug_column_2').find(class_='vcard').text
-        reporter = reporter.replace('\n', '').strip() # re-format reporter name
-        # print('Reporter: %s' % reporter)
-        first_commenter = comments[0].find(class_='vcard').text
-        first_commenter = first_commenter.replace('\n', '').strip() # re-format commenter name
+    try:
+        # check if the issue is duplicate
+        status = soup.find(id=status_id).text
+        status = ' '.join(status.split())
+        if status in DUPLICATED_ISSUES:
+            print('Duplicated issue!')
+            return
         
-        if first_commenter == reporter: # get issue description if the first commenter is also reporter
-            comment = comments[0].find(class_='bz_comment_text').text
-            # print('Comment: %s' % comment)
-            description = comment
+        if 'bugzilla.mozilla.org' in url_prefix:
+            importance = soup.find(id='field-value-bug_severity').text
+        elif 'https://bugs.eclipse.org' in url_prefix:
+            importance = soup.find(id='bz_show_bug_column_1').find('table').find_all('tr')[8].text
+        else: # invalid url
+            return
+        
+        importance = ' '.join(importance.split())
+        if 'enhancement' not in importance: # only retrieve requirements (with enhancement)
+            print('Not requirement - {0}\n'.format(importance))
+            return None
+        
+        title = soup.find(id=title_id).text
+        # print(title)
+        description = ""
+        
+        # Attachments description might reveal some important information about the issue
+        # Include all obsolete attachments
+        attachments_content = []
+        attachments = soup.find(id=attachment_id)
+        if attachments: # if there is attachment
+            attachments = attachments.find_all(class_=re.compile(attachment_regex))
+            if len(attachments) > 1:
+                for attach in attachments[1:]:
+                    if 'bugzilla.mozilla.org' in url_prefix:
+                        attachments_content.append(attach.a.text)
+                    elif 'https://bugs.eclipse.org' in url_prefix:
+                        attachments_content.append(attach.b.text)
+        
+        # make an assumption that the reporter will make a more detailed description
+        # with the first comment. Consider the first comment as a part of description
+        # if the reporter is also the first commenter
+        comments = soup.find_all(id=re.compile(comment_regex))
+        if len(comments) > 0:
+            reporter = soup.find(id=reporter_id).find(class_=reporter_class).text
+            reporter = reporter.replace('\n', '').strip() # re-format reporter name
+            # print('Reporter: %s' % reporter)
+            first_commenter = comments[0].find(class_=commenter_class).text
+            first_commenter = first_commenter.replace('\n', '').strip() # re-format commenter name
+            
+            if first_commenter == reporter: # get issue description if the first commenter is also reporter
+                comment = comments[0].find(class_=comment_text_class).text
+                # print('Comment: %s' % comment)
+                description = comment
+    except Exception as err: # an unexpected exception happened. sometimes due to invalid authority access
+        print('Exception happened! {0}\n'.format(err))
+        return None
     
     print('Completed!\n')
     return Issue(str(_id), title, description, attachments_content)
@@ -129,14 +126,16 @@ def scrape(system, ids):
     system = system.upper()
     # If user want to scrape data within a range of ids
     if len(ids) == 2:
-        for _id in range(ids[0], ids[1] + 1):
+        for i in range(ids[0], ids[1] + 1):
             if system == 'FIREFOX':
-                issue = scrape_ff(_id)
+                issue = scrape_issue(url_prefix=FIREFOX_URL_PREFIX, _id=i, attributes=firefox_attributes)
             elif system == 'MYLYN':
-                issue = scrape_ml(_id)
+                issue = scrape_issue(url_prefix=MYLYN_URL_PREFIX, _id=i, attributes=mylyn_attributes)
             else:
                 raise RuntimeError('System is unsupported: ' + system)
-            issues.append(issue)
+            
+            if issue is not None:
+                issues.append(issue)
     else:
         raise RuntimeError('Please specify the ids range you want to scrape!')
     
@@ -201,3 +200,6 @@ def to_xml(f, system, issues):
     # write to file
     tree = etree.ElementTree(element=root)
     tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
+    
+issues = scrape(system='Firefox', ids=[220000, 220050])
+to_xml('data/firefox_issues_new.xml', 'Firefox', issues)
