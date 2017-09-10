@@ -205,9 +205,6 @@ def to_xml(f, system, issues):
     tree = etree.ElementTree(element=root)
     tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
  
-def f(x):
-    return x*2 
-
 def split_range(l, n):
     """Split a list into n-equal ranges
     
