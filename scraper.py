@@ -6,7 +6,11 @@ import requests
 from bs4 import BeautifulSoup
 from lxml import etree
 
+import os
+import argparse
 import re
+import multiprocessing as mp
+import datetime
 
 from issue import Issue
 
@@ -200,6 +204,59 @@ def to_xml(f, system, issues):
     # write to file
     tree = etree.ElementTree(element=root)
     tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
+ 
+def f(x):
+    return x*2 
+
+def split_range(l, n):
+    """Split a list into n-equal ranges
     
-issues = scrape(system='Firefox', ids=[220000, 220050])
-to_xml('data/firefox_issues_new.xml', 'Firefox', issues)
+    Arguments:
+        l: the list to be partitioned
+        n: number of sub-ranges
+        
+    Returns:
+        a list of equal ranges
+    """
+    range_list = []
+    range_diff = (l[1] - l[0])/n
+    for i in range(n):
+        range_list.append([l[0]+range_diff*i, l[0]+range_diff*(i+1)-1])
+        
+    return range_list
+
+def main():
+    # argurment parser
+    parser = argparse.ArgumentParser('python scraper.py <system> <from-id> <to-id>')
+    # positional arguments
+    parser.add_argument('system', type=str, help='An open-source system. Can be either Firefox or Mylyn')
+    parser.add_argument('from-id', type=int, help='Starting id.')
+    parser.add_argument('to-id', type=int, help='Ending id.')
+    parser.add_argument('num-processes', type=int, help='Number of processes running to scrape data.')
+    
+    _args = vars(parser.parse_args())
+    
+    #     ids=[[220000, 220100], [220101, 220200], [220201, 220300], [220301, 220400], [220401, 220500]]
+    ids = split_range([_args['from-id'], _args['to-id']], _args['num-processes'])
+    issues = []
+    
+    pool = mp.Pool(processes=_args['num-processes'])
+    results = [pool.apply_async(scrape, args=(_args['system'], id_range)) for id_range in ids]
+    # ensure that all processes in the pool were terminated and resources were freed
+    pool.close() 
+    pool.join()
+    
+    l = []
+    [l.append(r.get()) for r in results]
+    
+    # flat out multiple list into one
+    issues = [item for sublist in l for item in sublist]
+    print('There are {0} requirements are valid!'.format(len(issues)))
+    
+    # write scraped issues to xml file
+    currentDT = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    filename = _args['system'] + '-' + currentDT + '.xml'
+    to_xml(os.path.join('data', filename), _args['system'], issues)
+
+if __name__ == '__main__':
+    main()
