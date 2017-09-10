@@ -144,7 +144,32 @@ def scrape(system, ids):
         raise RuntimeError('Please specify the ids range you want to scrape!')
     
     return issues
-   
+
+def multiprocess_scrape(system, ids, num_processes):
+    """Use a pool of workers to speed up scraping process
+    
+    Arguments:
+        system: an open-source system (Firefox or Mylyn)
+        ids: a list of id ranges
+        num_processes: number of desired parallel processes
+    
+    Returns:
+        a list of scraped data storing in Issue objects
+    """
+    pool = mp.Pool(processes= num_processes)
+    results = [pool.apply_async(scrape, args=(system, id_range)) for id_range in ids]
+    # ensure that all processes in the pool were terminated and resources were freed
+    pool.close() 
+    pool.join()
+    
+    l = []
+    [l.append(r.get()) for r in results]
+    
+    # flat out multiple list into one
+    issues = [item for sublist in l for item in sublist]
+    
+    return issues
+
 def to_xml(f, system, issues):
     """ Write scraped issues to XML file
     
@@ -237,20 +262,9 @@ def main():
 #     _args = vars(parser.parse_args(['Mylyn', '500000', '500100', '10', '--filepath=issues.xml']))
     
     ids = split_range([_args['from-id'], _args['to-id']], _args['num-processes'])
-    
-    pool = mp.Pool(processes=_args['num-processes'])
-    results = [pool.apply_async(scrape, args=(_args['system'], id_range)) for id_range in ids]
-    # ensure that all processes in the pool were terminated and resources were freed
-    pool.close() 
-    pool.join()
-    
-    l = []
-    [l.append(r.get()) for r in results]
-    
-    # flat out multiple list into one
-    issues = [item for sublist in l for item in sublist]
+    issues = multiprocess_scrape(_args['system'], ids, _args['num-processes'])
+
     print('There are {0} requirements are valid!'.format(len(issues)))
-    
     # write scraped issues to xml file
     filepath = _args.get('filepath', -1)
     if filepath == -1 or filepath is None: # user didn't input filepath
