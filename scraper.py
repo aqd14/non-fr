@@ -10,7 +10,7 @@ import os
 import argparse
 import re
 import multiprocessing as mp
-import datetime
+import time
 
 from issue import Issue
 
@@ -224,18 +224,19 @@ def split_range(l, n):
 
 def main():
     # argurment parser
-    parser = argparse.ArgumentParser('python scraper.py <system> <from-id> <to-id>')
+    parser = argparse.ArgumentParser('python scraper.py <system> <from-id> <to-id> <num-processes> <--filepath>', description='Running scraper.')
     # positional arguments
     parser.add_argument('system', type=str, help='An open-source system. Can be either Firefox or Mylyn')
     parser.add_argument('from-id', type=int, help='Starting id.')
     parser.add_argument('to-id', type=int, help='Ending id.')
     parser.add_argument('num-processes', type=int, help='Number of processes running to scrape data.')
+    # optional arguments
+    parser.add_argument('--filepath', type=str, help='filepath to generated xml file.')
     
     _args = vars(parser.parse_args())
+#     _args = vars(parser.parse_args(['Mylyn', '500000', '500100', '10', '--filepath=issues.xml']))
     
-    #     ids=[[220000, 220100], [220101, 220200], [220201, 220300], [220301, 220400], [220401, 220500]]
     ids = split_range([_args['from-id'], _args['to-id']], _args['num-processes'])
-    issues = []
     
     pool = mp.Pool(processes=_args['num-processes'])
     results = [pool.apply_async(scrape, args=(_args['system'], id_range)) for id_range in ids]
@@ -251,9 +252,14 @@ def main():
     print('There are {0} requirements are valid!'.format(len(issues)))
     
     # write scraped issues to xml file
-    currentDT = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    filename = _args['system'] + '-' + currentDT + '.xml'
-    to_xml(os.path.join('data', filename), _args['system'], issues)
+    filepath = _args.get('filepath', -1)
+    if filepath == -1 or filepath is None: # user didn't input filepath
+        currentDT = time.strftime("%m-%d-%Y %H-%M-%S")
+        filepath = _args['system'] + '-' + currentDT + '.xml'
+        filepath = os.path.join('data', filepath)
+        
+    print(filepath)
+    to_xml(filepath, _args['system'], issues)
 
 if __name__ == '__main__':
     main()
