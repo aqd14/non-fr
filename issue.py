@@ -6,7 +6,7 @@ class Issue(object):
     """
     
     """
-    def __init__(self, _id, title, description, attachments):
+    def __init__(self, _id, title='', description='', attachments=[]):
         self._id = _id
         self.title = title
         self.description = description

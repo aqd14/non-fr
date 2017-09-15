@@ -267,7 +267,7 @@ def main():
     print('There are {0} requirements are valid!'.format(len(issues)))
     # write scraped issues to xml file
     filepath = _args.get('filepath', -1)
-    if filepath == -1 or filepath is None: # user didn't input filepath
+    if filepath == -1 or filepath is None: # user didn't input filepath, use current date time to make unique file name
         currentDT = time.strftime("%m-%d-%Y %H-%M-%S")
         filepath = _args['system'] + '-' + currentDT + '.xml'
         filepath = os.path.join('data', filepath)
