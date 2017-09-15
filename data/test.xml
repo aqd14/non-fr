@@ -1,9 +1,0 @@
-<root>
-	<system>Firefox</system>
-	<issues>
-		<issue>
-			<id>1000</id>
-			<title>test title</title>
-		</issue>
-	</issue>
-</root>
