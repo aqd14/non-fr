@@ -167,15 +167,20 @@ def scrape_lucene(url_prefix, _id, attributes):
         print('Can\'t access URL!')
         
     soup = BeautifulSoup(result.content, 'lxml')
-    
-    status = soup.find(id=status_id)
-    status = ' '.join(status.split())
-    if status != 'New Feature': # not a requirement
+    try:
+        status = soup.find(id=status_id).text
+        status = ' '.join(status.split())
+        if status != 'New Feature': # not a requirement
+            print('Not requirement - {0}\n'.format(status))
+            return None
+        
+        title = ' '.join(soup.find(id=title_id).text.split())
+        description = ' '.join(soup.find(id=description_id).text.split())
+    except Exception as err:
+        print('Exception happened! {0}\n'.format(err))
         return None
     
-    title = ' '.join(soup.find(id=title_id).text.split())
-    description = ' '.join(soup.find(id=description_id).text.split())
-    
+    print('Completed!\n')
     return Issue(str(_id), title, description, [])
 
 def scrape(system, ids):
@@ -342,5 +347,4 @@ def main():
     to_xml(filepath, _args['system'], issues)
 
 if __name__ == '__main__':
-    scrape('mylyn', [2500, 3000])
     main()
