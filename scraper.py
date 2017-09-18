@@ -16,21 +16,46 @@ from issue import Issue
 
 FIREFOX_URL_PREFIX = 'https://bugzilla.mozilla.org/show_bug.cgi?id='
 MYLYN_URL_PREFIX = 'https://bugs.eclipse.org/bugs/show_bug.cgi?id='
+LUCENE_URL_PREFIX = 'https://issues.apache.org/jira/browse/LUCENE-'
+
 DUPLICATED_ISSUES = ["RESOLVED DUPLICATE", "VERIFIED DUPLICATE"] # ignore duplicate issues
 
-firefox_attributes = {'status-id':'field-value-status_summary', 'title-id':'field-value-short_desc',
-                      'attachment-id':'attachments', 'attachment-regex':'^attach-desc$',
-                      'comment-regex':'^c\d$', 'reporter-id':'field-reporter', 'reporter-class':'fna',
-                      'commenter-class':'fna', 'comment-text-class':'comment-text'
-                      }
+firefox_attributes = {
+    'status-id':'field-value-status_summary', 'title-id':'field-value-short_desc',
+    'attachment-id':'attachments', 'attachment-regex':'^attach-desc$',
+    'comment-regex':'^c\d$', 'reporter-id':'field-reporter', 'reporter-class':'fna',
+    'commenter-class':'fna', 'comment-text-class':'comment-text'
+}
 
-mylyn_attributes = {'status-id':'bz_field_status', 'title-id':'short_desc_nonedit_display',
-                      'attachment-id':'attachment_table', 'attachment-regex':'^bz_contenttype+$',
-                      'comment-regex':'^c\d$', 'reporter-id':'bz_show_bug_column_2', 'reporter-class':'vcard',
-                      'commenter-class':'vcard', 'comment-text-class':'bz_comment_text'
-                      }
+mylyn_attributes = {
+    'status-id':'bz_field_status', 'title-id':'short_desc_nonedit_display',
+    'attachment-id':'attachment_table', 'attachment-regex':'^bz_contenttype+$',
+    'comment-regex':'^c\d$', 'reporter-id':'bz_show_bug_column_2', 'reporter-class':'vcard',
+    'commenter-class':'vcard', 'comment-text-class':'bz_comment_text'
+}
+
+lucene_attributes = {
+    'status-id':'type-val', 'title-id':'summary-val', 'description-id':'description-val'
+}
 
 def scrape_issue(url_prefix, _id, attributes):
+    """Scrape Mylyn or Firefox issues (They share HTML structure)
+    
+    Parameters
+    ----------
+    url_prefix : string
+        Issue tracking system URL prefixx
+        
+    _id : string
+        Issue id
+        
+    attributes : dictionary
+        Contains all HTML attributes needed to scrape data
+    
+    Returns
+    -------
+    issue : an Issue instance
+    """
     # extract necessary html attributes from dictionary
     status_id = attributes['status-id']
     title_id = attributes['title-id']
@@ -42,9 +67,6 @@ def scrape_issue(url_prefix, _id, attributes):
     commenter_class = attributes['commenter-class']
     comment_text_class = attributes['comment-text-class']
     
-    """ 
-    Scrape Mylyn issues
-    """
     url = url_prefix + str(_id)
     print('Scraping url: %s' % url)
     result = requests.get(url)
@@ -61,14 +83,14 @@ def scrape_issue(url_prefix, _id, attributes):
         status = ' '.join(status.split())
         if status in DUPLICATED_ISSUES:
             print('Duplicated issue!')
-            return
+            return None
         
         if 'bugzilla.mozilla.org' in url_prefix:
             importance = soup.find(id='field-value-bug_severity').text
         elif 'https://bugs.eclipse.org' in url_prefix:
             importance = soup.find(id='bz_show_bug_column_1').find('table').find_all('tr')[8].text
         else: # invalid url
-            return
+            return None
         
         importance = ' '.join(importance.split())
         if 'enhancement' not in importance: # only retrieve requirements (with enhancement)
@@ -88,9 +110,9 @@ def scrape_issue(url_prefix, _id, attributes):
             if len(attachments) > 1:
                 for attach in attachments[1:]:
                     if 'bugzilla.mozilla.org' in url_prefix:
-                        attachments_content.append(attach.a.text)
+                        attachments_content.append(' '.join(attach.a.text.split()))
                     elif 'https://bugs.eclipse.org' in url_prefix:
-                        attachments_content.append(attach.b.text)
+                        attachments_content.append(' '.join(attach.b.text.split()))
         
         # make an assumption that the reporter will make a more detailed description
         # with the first comment. Consider the first comment as a part of description
@@ -106,13 +128,55 @@ def scrape_issue(url_prefix, _id, attributes):
             if first_commenter == reporter: # get issue description if the first commenter is also reporter
                 comment = comments[0].find(class_=comment_text_class).text
                 # print('Comment: %s' % comment)
-                description = comment
+                description = ' '.join(comment.split())
     except Exception as err: # an unexpected exception happened. sometimes due to invalid authority access
         print('Exception happened! {0}\n'.format(err))
         return None
     
     print('Completed!\n')
     return Issue(str(_id), title, description, attachments_content)
+
+def scrape_lucene(url_prefix, _id, attributes):
+    """Scrape LUCENE issues
+    
+    Parameters
+    ----------
+    url_prefix : string
+        Issue tracking system URL prefixx
+        
+    _id : string
+        Issue id
+        
+    attributes : dictionary
+        Contains all HTML attributes needed to scrape data
+    
+    Returns
+    -------
+    issue : an Issue instance
+    """
+    
+    status_id = attributes['status-id']
+    title_id = attributes['title-id']
+    description_id = attributes['description-id']
+    
+    url = url_prefix + str(_id)
+    print('Scraping url: %s' % url)
+    result = requests.get(url)
+    
+    if result.status_code != 200:
+        print('Can\'t access URL!')
+        
+    soup = BeautifulSoup(result.content, 'lxml')
+    
+    status = soup.find(id=status_id)
+    status = ' '.join(status.split())
+    if status != 'New Feature': # not a requirement
+        return None
+    
+    title = ' '.join(soup.find(id=title_id).text.split())
+    description = ' '.join(soup.find(id=description_id).text.split())
+    
+    return Issue(str(_id), title, description, [])
 
 def scrape(system, ids):
     """Scrape a list of issues given the id range.
@@ -135,6 +199,8 @@ def scrape(system, ids):
                 issue = scrape_issue(url_prefix=FIREFOX_URL_PREFIX, _id=i, attributes=firefox_attributes)
             elif system == 'MYLYN':
                 issue = scrape_issue(url_prefix=MYLYN_URL_PREFIX, _id=i, attributes=mylyn_attributes)
+            elif system == 'LUCENE':
+                issue = scrape_lucene(url_prefix=LUCENE_URL_PREFIX, _id=i, attributes=lucene_attributes)
             else:
                 raise RuntimeError('System is unsupported: ' + system)
             
@@ -156,7 +222,7 @@ def multiprocess_scrape(system, ids, num_processes):
     Returns:
         a list of scraped data storing in Issue objects
     """
-    pool = mp.Pool(processes= num_processes)
+    pool = mp.Pool(processes=num_processes)
     results = [pool.apply_async(scrape, args=(system, id_range)) for id_range in ids]
     # ensure that all processes in the pool were terminated and resources were freed
     pool.close() 
@@ -251,7 +317,7 @@ def main():
     # argurment parser
     parser = argparse.ArgumentParser('python scraper.py <system> <from-id> <to-id> <num-processes> <--filepath>', description='Running scraper.')
     # positional arguments
-    parser.add_argument('system', type=str, help='An open-source system. Can be either Firefox or Mylyn')
+    parser.add_argument('system', type=str, help='An open-source system. Can be either Firefox, Mylyn or Lucene')
     parser.add_argument('from-id', type=int, help='Starting id.')
     parser.add_argument('to-id', type=int, help='Ending id.')
     parser.add_argument('num-processes', type=int, help='Number of processes running to scrape data.')
@@ -276,4 +342,5 @@ def main():
     to_xml(filepath, _args['system'], issues)
 
 if __name__ == '__main__':
+    scrape('mylyn', [2500, 3000])
     main()
