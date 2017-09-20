@@ -20,17 +20,19 @@ LUCENE_URL_PREFIX = 'https://issues.apache.org/jira/browse/LUCENE-'
 
 DUPLICATED_ISSUES = ["RESOLVED DUPLICATE", "VERIFIED DUPLICATE"] # ignore duplicate issues
 
+MINIMUM_COMMENTS = 15 # minimum number of comments in an issue to be considered as an active discussion
+
 firefox_attributes = {
     'status-id':'field-value-status_summary', 'title-id':'field-value-short_desc',
     'attachment-id':'attachments', 'attachment-regex':'^attach-desc$',
-    'comment-regex':'^c\d$', 'reporter-id':'field-reporter', 'reporter-class':'fna',
+    'comment-regex':'^c\d+$', 'reporter-id':'field-reporter', 'reporter-class':'fna',
     'commenter-class':'fna', 'comment-text-class':'comment-text'
 }
 
 mylyn_attributes = {
     'status-id':'bz_field_status', 'title-id':'short_desc_nonedit_display',
     'attachment-id':'attachment_table', 'attachment-regex':'^bz_contenttype+$',
-    'comment-regex':'^c\d$', 'reporter-id':'bz_show_bug_column_2', 'reporter-class':'vcard',
+    'comment-regex':'^c\d+$', 'reporter-id':'bz_show_bug_column_2', 'reporter-class':'vcard',
     'commenter-class':'vcard', 'comment-text-class':'bz_comment_text'
 }
 
@@ -69,20 +71,20 @@ def scrape_issue(url_prefix, _id, attributes):
     
     url = url_prefix + str(_id)
     print('Scraping url: %s' % url)
-    result = requests.get(url)
-    # Can't access the url
-    if result.status_code != 200:
-        print('Can\'t access url!')
-        return
-    c = result.content
-    soup = BeautifulSoup(c, 'lxml')
     
     try:
+        result = requests.get(url)
+        # Can't access the url
+        if result.status_code != 200:
+            print('Can\'t access url!')
+            return
+        c = result.content
+        soup = BeautifulSoup(c, 'lxml')
         # check if the issue is duplicate
         status = soup.find(id=status_id).text
         status = ' '.join(status.split())
         if status in DUPLICATED_ISSUES:
-            print('Duplicated issue!')
+            print('[{0}] Duplicated issue!'.format(_id))
             return None
         
         if 'bugzilla.mozilla.org' in url_prefix:
@@ -94,13 +96,31 @@ def scrape_issue(url_prefix, _id, attributes):
         
         importance = ' '.join(importance.split())
         if 'enhancement' not in importance: # only retrieve requirements (with enhancement)
-            print('Not requirement - {0}\n'.format(importance))
+            print('[{0}] Not requirement - {1}\n'.format(_id, importance))
             return None
         
         title = soup.find(id=title_id).text
         # print(title)
         description = ""
-        
+        # make an assumption that the reporter will make a more detailed description
+        # with the first comment. Consider the first comment as a part of description
+        # if the reporter is also the first commenter
+        comments = soup.find_all(id=re.compile(comment_regex))
+        if len(comments) > MINIMUM_COMMENTS: # the scraped issue should have a certain number of comments to be considered active
+            reporter = soup.find(id=reporter_id).find(class_=reporter_class).text
+            reporter = reporter.replace('\n', '').strip() # re-format reporter name
+            # print('Reporter: %s' % reporter)
+            first_commenter = comments[0].find(class_=commenter_class).text
+            first_commenter = first_commenter.replace('\n', '').strip() # re-format commenter name
+            
+            if first_commenter == reporter: # get issue description if the first commenter is also reporter
+                comment = comments[0].find(class_=comment_text_class).text
+                # print('Comment: %s' % comment)
+                description = ' '.join(comment.split())
+        else:
+            print('[{0}] Issue has only {1} comments'.format(_id, len(comments)))
+            return None
+                    
         # Attachments description might reveal some important information about the issue
         # Include all obsolete attachments
         attachments_content = []
@@ -113,27 +133,12 @@ def scrape_issue(url_prefix, _id, attributes):
                         attachments_content.append(' '.join(attach.a.text.split()))
                     elif 'https://bugs.eclipse.org' in url_prefix:
                         attachments_content.append(' '.join(attach.b.text.split()))
-        
-        # make an assumption that the reporter will make a more detailed description
-        # with the first comment. Consider the first comment as a part of description
-        # if the reporter is also the first commenter
-        comments = soup.find_all(id=re.compile(comment_regex))
-        if len(comments) > 0:
-            reporter = soup.find(id=reporter_id).find(class_=reporter_class).text
-            reporter = reporter.replace('\n', '').strip() # re-format reporter name
-            # print('Reporter: %s' % reporter)
-            first_commenter = comments[0].find(class_=commenter_class).text
-            first_commenter = first_commenter.replace('\n', '').strip() # re-format commenter name
-            
-            if first_commenter == reporter: # get issue description if the first commenter is also reporter
-                comment = comments[0].find(class_=comment_text_class).text
-                # print('Comment: %s' % comment)
-                description = ' '.join(comment.split())
+
     except Exception as err: # an unexpected exception happened. sometimes due to invalid authority access
-        print('Exception happened! {0}\n'.format(err))
+        print('[{0}] Exception happened! {1}\n'.format(_id, err))
         return None
     
-    print('Completed!\n')
+    print('[{0}] Completed!\n'.format(_id))
     return Issue(str(_id), title, description, attachments_content)
 
 def scrape_lucene(url_prefix, _id, attributes):
@@ -161,26 +166,26 @@ def scrape_lucene(url_prefix, _id, attributes):
     
     url = url_prefix + str(_id)
     print('Scraping url: %s' % url)
-    result = requests.get(url)
-    
-    if result.status_code != 200:
-        print('Can\'t access URL!')
-        
-    soup = BeautifulSoup(result.content, 'lxml')
+
     try:
+        result = requests.get(url)
+        if result.status_code != 200:
+            print('Can\'t access URL!')
+        
+        soup = BeautifulSoup(result.content, 'lxml')
         status = soup.find(id=status_id).text
         status = ' '.join(status.split())
-        if status != 'New Feature': # not a requirement
-            print('Not requirement - {0}\n'.format(status))
+        if status != 'New Feature' and status != 'Improvement': # not a requirement
+            print('[{0}] Not requirement - {1}\n'.format(_id, status))
             return None
         
         title = ' '.join(soup.find(id=title_id).text.split())
         description = ' '.join(soup.find(id=description_id).text.split())
     except Exception as err:
-        print('Exception happened! {0}\n'.format(err))
+        print('[{0}] Exception happened! {1}\n'.format(_id, err))
         return None
     
-    print('Completed!\n')
+    print('[{0}] Completed!\n'.format(_id))
     return Issue(str(_id), title, description, [])
 
 def scrape(system, ids):
@@ -339,8 +344,9 @@ def main():
     # write scraped issues to xml file
     filepath = _args.get('filepath', -1)
     if filepath == -1 or filepath is None: # user didn't input filepath, use current date time to make unique file name
-        currentDT = time.strftime("%m-%d-%Y %H-%M-%S")
-        filepath = _args['system'] + '-' + currentDT + '.xml'
+        # currentDT = time.strftime("%m-%d-%Y %H-%M-%S")
+        additional = str(_args['from-id']) + "-" + str(_args['to-id'])
+        filepath = _args['system'] + '-' + additional + '.xml'
         filepath = os.path.join('data', filepath)
         
     print(filepath)
