@@ -37,7 +37,7 @@ mylyn_attributes = {
 }
 
 lucene_attributes = {
-    'status-id':'type-val', 'title-id':'summary-val', 'description-id':'description-val'
+    'status-id':'type-val', 'title-id':'summary-val', 'description-id':'description-val', 'comment-regex':'^comment-\d+$'
 }
 
 def scrape_issue(url_prefix, _id, attributes):
@@ -118,7 +118,7 @@ def scrape_issue(url_prefix, _id, attributes):
                 # print('Comment: %s' % comment)
                 description = ' '.join(comment.split())
         else:
-            print('[{0}] Issue has only {1} comments'.format(_id, len(comments)))
+            print('[{0}] Issue has only {1} comments\n'.format(_id, len(comments)))
             return None
                     
         # Attachments description might reveal some important information about the issue
@@ -163,6 +163,7 @@ def scrape_lucene(url_prefix, _id, attributes):
     status_id = attributes['status-id']
     title_id = attributes['title-id']
     description_id = attributes['description-id']
+    comment_regex = attributes['comment-regex']
     
     url = url_prefix + str(_id)
     print('Scraping url: %s' % url)
@@ -177,6 +178,12 @@ def scrape_lucene(url_prefix, _id, attributes):
         status = ' '.join(status.split())
         if status != 'New Feature' and status != 'Improvement': # not a requirement
             print('[{0}] Not requirement - {1}\n'.format(_id, status))
+            return None
+        
+        # Only accept issue that contains a certain number of comments
+        comments = soup.find_all(id=re.compile(comment_regex))
+        if len(comments) < MINIMUM_COMMENTS:
+            print('[{0}] Issue has only {1} comments!\n'.format(_id, len(comments)))
             return None
         
         title = ' '.join(soup.find(id=title_id).text.split())
@@ -316,6 +323,13 @@ def split_range(l, n):
     Returns:
         a list of equal ranges
     """
+    
+    if len(l) != 2:
+        raise RuntimeError('Splited list should have length 2!\n')
+    
+    if l[0] > l[1]:
+        raise RuntimeError('The first item in list should be smaller one - {0} > {1}\n'.format(l[0], l[1]))
+    
     range_list = []
     range_diff = (l[1] - l[0])/n
     for i in range(n):
