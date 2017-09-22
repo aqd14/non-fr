@@ -21,6 +21,7 @@ LUCENE_URL_PREFIX = 'https://issues.apache.org/jira/browse/LUCENE-'
 DUPLICATED_ISSUES = ["RESOLVED DUPLICATE", "VERIFIED DUPLICATE"] # ignore duplicate issues
 
 MINIMUM_COMMENTS = 15 # minimum number of comments in an issue to be considered as an active discussion
+MINIMUM_COMMENTERS = 10 # minimum number of commenters in an issue to be considered as an active discussion
 
 firefox_attributes = {
     'status-id':'field-value-status_summary', 'title-id':'field-value-short_desc',
@@ -185,7 +186,20 @@ def scrape_lucene(url_prefix, _id, attributes):
         if len(comments) < MINIMUM_COMMENTS:
             print('[{0}] Issue has only {1} comments!\n'.format(_id, len(comments)))
             return None
+        else:
+            print('[{0}] Issue has {1} comments!\n'.format(_id, len(comments)))
+        # Count number of commenters participating in the discussion
+        commenters = dict()
+        for comment in comments:
+            c = comment.find('a', attrs={'class', 'user-hover user-avatar'}).text
+            commenters[c] = commenters.get(c, 0) + 1
         
+        if (len(commenters) < MINIMUM_COMMENTERS):
+            print('[{0}] Issue has only {1} comments!\n'.format(_id, len(commenters)))
+            return None
+        else:
+            print('[{0}] Issue has {1} commenters!\n'.format(_id, len(commenters)))
+            
         title = ' '.join(soup.find(id=title_id).text.split())
         description = ' '.join(soup.find(id=description_id).text.split())
     except Exception as err:
