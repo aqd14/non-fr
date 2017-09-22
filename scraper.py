@@ -108,6 +108,11 @@ def scrape_issue(url_prefix, _id, attributes):
         # if the reporter is also the first commenter
         comments = soup.find_all(id=re.compile(comment_regex))
         if len(comments) > MINIMUM_COMMENTS: # the scraped issue should have a certain number of comments to be considered active
+            # Count number of commenters participating in the discussion
+            commenters = count_commenters(_id, comments, ('span', {'class':'fn'}))
+            if commenters is None:
+                return None
+            
             reporter = soup.find(id=reporter_id).find(class_=reporter_class).text
             reporter = reporter.replace('\n', '').strip() # re-format reporter name
             # print('Reporter: %s' % reporter)
@@ -189,16 +194,9 @@ def scrape_lucene(url_prefix, _id, attributes):
         else:
             print('[{0}] Issue has {1} comments!\n'.format(_id, len(comments)))
         # Count number of commenters participating in the discussion
-        commenters = dict()
-        for comment in comments:
-            c = comment.find('a', attrs={'class', 'user-hover user-avatar'}).text
-            commenters[c] = commenters.get(c, 0) + 1
-        
-        if (len(commenters) < MINIMUM_COMMENTERS):
-            print('[{0}] Issue has only {1} comments!\n'.format(_id, len(commenters)))
+        commenters = count_commenters(_id, comments, ('a', {'class':'user-hover user-avatar'}))
+        if commenters is None:
             return None
-        else:
-            print('[{0}] Issue has {1} commenters!\n'.format(_id, len(commenters)))
             
         title = ' '.join(soup.find(id=title_id).text.split())
         description = ' '.join(soup.find(id=description_id).text.split())
@@ -241,6 +239,21 @@ def scrape(system, ids):
         raise RuntimeError('Please specify the ids range you want to scrape!')
     
     return issues
+
+def count_commenters(_id, comments, attributes):
+    # Count number of commenters participating in the discussion
+    commenters = dict()
+    for comment in comments:
+        c = comment.find(attributes[0], attrs=attributes[1]).text
+        commenters[c] = commenters.get(c, 0) + 1
+    
+    if (len(commenters) < MINIMUM_COMMENTERS):
+        print('[{0}] Issue has only {1} comments!\n'.format(_id, len(commenters)))
+        return None
+    else:
+        print('[{0}] Issue has {1} commenters!\n'.format(_id, len(commenters)))
+    
+    return commenters
 
 def multiprocess_scrape(system, ids, num_processes):
     """Use a pool of workers to speed up scraping process
