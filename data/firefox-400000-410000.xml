@@ -1,0 +1,1323 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <system>firefox</system>
+  <issues>
+    <issue>
+      <id>400064</id>
+      <title>Adapt Web Feed preview page for Podcasts and Video Podcasts</title>
+      <description>If an RSS feed is determined to be a podcast or video podcast (bug #400062), we need to adapt the feed preview page: -change the icon -change the descriptive text -change the set of available applications (needs to be the same set as what is listed in the applications prefpane)</description>
+      <attachments>
+        <attach>Screenshot</attach>
+        <attach>Previous patch plus some fixes.</attach>
+        <attach>Patch for strings.</attach>
+        <attach>Previous patch 298294 with changes based on myk's suggestions.</attach>
+        <attach>Screenshot of the revised look with Beltzner's comments factored in.</attach>
+        <attach>Previous patch (299343) with a bugfix.</attach>
+        <attach>Previous patch (299362) plus this one changes the feed icon based on the feed type per Alex's request (comments 15 and 17).</attach>
+        <attach>strings changes as checked in</attach>
+        <attach>New strings patch against subscribe.properties 1.9 fixing localization issues</attach>
+        <attach>Patch 299365 with myk's suggestions and the strings changes in 299457.</attach>
+        <attach>Patch 299518 with tweaks suggested by myk.</attach>
+        <attach>Patch ready for checkin</attach>
+        <attach>File missing from patch 3000241 that was in 299595.</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400120</id>
+      <title>Add statically-updated, per-tab CPU and RAM monitor</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.3 MEGAUPLOAD 1.0 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.3 MEGAUPLOAD 1.0 I request that you add the ability for users to see how much CPU (and mem) each of their open web browser windows and/or tabs are using. Often, I will have 20 windows open (and a couple tabs in some), and my cpu will be at 50%, my processor fan spinning up to full blast. Everything in ffox slows down. And then I close one particular window and all of a sudden everything is calm and smooth. I presently have no way to determine which window/tab/page is the hog, besides manually closing every one (and then reopening it if it's not the problem window). I have asked some extension developers who tell me this is too low-level for them to do, hence I'm here. Reproducible: Always Steps to Reproduce: this is not applicable</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>400279</id>
+      <title>Category colors should be displayed next to the event boxes</title>
+      <description>According to the proposal at [1] categories should be displayed as a colored area next to the event boxes. Currently, the categories are getting displayed as a simple border around the boxes. [1] http://wiki.mozilla.org/Calendar:Improved_Events_and_Tasks</description>
+      <attachments>
+        <attach>category colors in month view</attach>
+        <attach>gradient image</attach>
+        <attach>patch v1</attach>
+        <attach>patch v2</attach>
+        <attach>alternative screenshot</attach>
+        <attach>patch v3</attach>
+        <attach>patch v4</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400296</id>
+      <title>Have release automation support signing OSX builds</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7 According to the link, Mac OS X understands signed applications. Since the Windows firefox.exe is already signed, it would make sense to sing firefox.app too (and thunderbird.app, but I'm to lazy to file another bug) From the URL: "Signed Applications Feel safe with your applications. A digital signature on an application verifies its identity and ensures its integrity. All applications shipped with Leopard are signed by Apple, and third-party software developers can also sign their applications." Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>refine dmg packing/unpacking</attach>
+        <attach>integrate with Makefile, verification tools</attach>
+        <attach>refresh patch</attach>
+        <attach>integrate with release automation, use custom resource rules</attach>
+        <attach>integrate multiple signed platforms in buildbotcustom</attach>
+        <attach>tools side integration</attach>
+        <attach>fix tools-side automation integration</attach>
+        <attach>fix buildbotcustom integration</attach>
+        <attach>refresh buildbotcustom integration</attach>
+        <attach>refresh tools integration</attach>
+        <attach>signing script changes</attach>
+        <attach>turn on signing in the release configs</attach>
+        <attach>Preliminary Patch</attach>
+        <attach>Updated patch</attach>
+        <attach>Updated patch - remove product</attach>
+        <attach>patch to build-tools</attach>
+        <attach>patch to build-tools</attach>
+        <attach>patch to build-tools</attach>
+        <attach>patch to build-tools</attach>
+        <attach>final patch - build-tools</attach>
+        <attach>final patch - build-tools</attach>
+        <attach>patch to buildbot-configs</attach>
+        <attach>Sample Signscript</attach>
+        <attach>patch to build-tools</attach>
+        <attach>Test '.tar' for dmg signing</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400398</id>
+      <title>Remove the throbber from the menu bar / nav toolbar default set</title>
+      <description>Created attachment 285471 [details] [diff] [review] patch This idea came up in bug 397723, in particular bug 397723 comment 94.</description>
+      <attachments>
+        <attach>better patch</attach>
+        <attach>show the throbber if it's busy and the tab bar is collapsed</attach>
+        <attach>remove it</attach>
+        <attach>leave it in the customization sheet</attach>
+        <attach>updated to trunk</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400439</id>
+      <title>reduce redundancy in file of ignored leak stacks</title>
+      <description>The "ignored" file of known leak stacks has much unhelpful redundancy. Ideally it would contain one line per conceptual leak. When that one leak is fixed, that one line would be removed. But today it contains many lines for a single conceptual leak. I want to eliminate the redundancy and reduce the file size, approaching the lower bound of one line per conceptual leak. There are (at least) two reasons for this redundancy. 1) compound objects generate multiple stacks when leaked. Consider an object like a PRLock or a PKIX object, which contain several parts, each of which is separately allocated. When a single PRLock or single PKIX object is leaked, all the indivudual parts of the object are leaked, each with a separate stack. But the leak is really of a single compound object, and when it is fixed, all the stacks for all the parts of it will go away. So, I changed the stacks for compound objects. For example, I changed all the stacks that leak PRLocks, so that PR_NewLock/** is the last thing that appears on the line, then eliminated duplicate lines. That eliminated MANY redundant lines. 2) Some functions always leak, no matter how they are called, nor in which program they are called. If they are called in many paths, in many programs, they generate many leak stacks. But when the leaky function is fixed, all the stacks that call it will go away. I identified numerous leaky functions, such as cert_VerifyCertChainPkix that appear in many different call stacks, and changed all those stacks to begin with **/cert_VerifyCertChainPkix then eliminated duplicate lines from the file. This removed many redundant lines. The result of those changes is the patch attached here. After I made all these changes, I noticed one more thing that I want to ask about. There are many stacks that appear twice, whose only difference is the presence of the _Util suffix in one stack, e.g. these two ocspclnt/main/CERT_SetOCSPDefaultResponder/PORT_Strdup/** ocspclnt/main/CERT_SetOCSPDefaultResponder/PORT_Strdup_Util/** Do both of these stacks occur on the trunk? Or does this one file contain both trunk stacks and branch stacks? I don't want branch-only stacks on the trunk's ignored file, nor trunk-only stacks in the branch's ignored file. I invite comments from you all. Slavo, please review and ensure that lines with "**" in the middle will work, e.g. strsclnt/**/thread_wrapper/do_connects/PR_Send (...)</description>
+      <attachments>
+        <attach>Patch.</attach>
+        <attach>Patch v2.</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400440</id>
+      <title>Auto-Publish local calendar - remote calendar not working offline</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; cs; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Build Identifier: Lightning 0.7 RC2 I do NOT like remote ICS calendar because it does not work when I am OFFLINE. There is an option for a one-shot ICS file publishing from the local calendar. Would it be possible to make an option for auto-republishing the calendar ICS file to a web share (like www.icalx.com or FTP) in certain intervals or better after each change in the local calendar? Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>IDL file for new object</attach>
+        <attach>modified constructor in calStorageCalendar.js</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400540</id>
+      <title>Check installer removed-files against dist/bin</title>
+      <description>Follow-up from bug 400407: We need some scripting to check whether any file of installer/removed-files.in has been built into dist/bin. If that's not feasible within the build, then the script should at least be part of ause's release scripting collection.</description>
+      <attachments>
+        <attach>call script to check removed-files list</attach>
+        <attach>remove components/autocomplete.xpt from removed-files.in</attach>
+        <attach>better license header, exception list</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400674</id>
+      <title>The Administration link should open a menu with links to separate admin pages</title>
+      <description>When hovering the Admistration page in the footer/header of pages, I would like to see a menu with "Products, Parameters, Users, ...". This would let us save a click and more easily administrate Bugzilla. I'm not asking for the removal of the Administration link! We replaced all the previous administrative links by this single link on purpose (we don't administrate Bugzilla that often and all the links take a lot of place). But saving one click is nice too.</description>
+      <attachments>
+        <attach>patch 2</attach>
+        <attach>patch v3</attach>
+        <attach>patch v4</attach>
+        <attach>patch v5</attach>
+        <attach>updated yui lib</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400902</id>
+      <title>Specialized GC arena for double values</title>
+      <description>Currently GC to allocate double values uses a common GC arena structure. This is inefficient for the following reasons. 1. Since the minimal allocation cell for GC arena is 2 CPU words, this allocates almost twice memory then necessary on 64 bit CPU. 2. It adds the finalization phase for double values. Such phase is not necessary since the double values do not have a finalizer. As such it should be possible to discover free double cells during the allocation. 3. It uses one byte of GC flags per jsdouble when with a specialized arena only the single bit to denote marked/used double cell is necessary. 4. A specialized GC arena should allow to minimize the number of ifs taken during the allocation and speed-up numerically-intensive scripts. Thus it would nice to support such specialized GC arena for double values.</description>
+      <attachments>
+        <attach>v 0.51</attach>
+        <attach>v 0.6</attach>
+        <attach>v 0.9</attach>
+        <attach>v 0.91</attach>
+        <attach>v 0.92</attach>
+        <attach>v0.92b</attach>
+        <attach>v 0.95</attach>
+        <attach>counter of double values</attach>
+        <attach>v1 (quilt patch)</attach>
+        <attach>v1</attach>
+        <attach>sunspider in js shell</attach>
+        <attach>v2</attach>
+        <attach>v3</attach>
+        <attach>v4</attach>
+        <attach>sunspider in js shell (thread-safe build)</attach>
+        <attach>v5</attach>
+        <attach>sunspider in js shell (thread-safe build)</attach>
+        <attach>v6</attach>
+        <attach>diff -b for v6</attach>
+        <attach>v7</attach>
+        <attach>diff -b for v7</attach>
+        <attach>v8</attach>
+        <attach>v8 for real</attach>
+        <attach>diff -b for v8</attach>
+        <attach>v7 - v8 delta</attach>
+        <attach>v9</attach>
+        <attach>v8 - v9 delta</attach>
+        <attach>v10</attach>
+        <attach>v10 for real</attach>
+        <attach>v11</attach>
+        <attach>sunspider in js shell (thread-safe build)</attach>
+        <attach>v12</attach>
+        <attach>sunspider in js shell (thread-safe build)</attach>
+        <attach>v13</attach>
+        <attach>v14</attach>
+        <attach>v14b</attach>
+        <attach>v15</attach>
+        <attach>v14-v15 delta</attach>
+        <attach>v16</attach>
+        <attach>v17</attach>
+        <attach>Test case for the bug</attach>
+        <attach>v18</attach>
+        <attach>v19</attach>
+        <attach>v14b - v19 delta</attach>
+        <attach>v19b</attach>
+        <attach>v14b - v19b delta</attach>
+        <attach>v19c</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400917</id>
+      <title>Want exported function that outputs all host names for DNS name matching</title>
+      <description>I'd like PSM to extract the list of valid DNS names from a cert. Bob R pointed out, this requires the use of CERT_FindNSStringExtension(nssCert, SEC_OID_NS_CERT_EXT_SSL_SERVER_NAME); which can override the name found in a cert's CN. Unfortunately CERT_FindNSStringExtension is not being exported. Can we do that for 3.12?</description>
+      <attachments>
+        <attach>Patch v2</attach>
+        <attach>Patch v3</attach>
+        <attach>Diff Diff between v2 and v3</attach>
+        <attach>Patch v3 with nits addressed, for check in</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400931</id>
+      <title>Enable predefined  IMAP settings for Gmail</title>
+      <description>IMAP is now enabled for Gmail. Actually when you add a new account it's possible to select Gmail but all predefined settings are for POP access. If I want to add IMAP access I need to go through 'Email account' Steps to reproduce: 1 Enable IMAP in your Gmail account. 2 Open Thunderbird, and select Tools &gt; Account Settings. 3 Click Add Account. 4 Select the Email account radio button and click Next. The Identity screen appears. 5 Enter your full name in the Your Name field. Enter your full Gmail email address (username@gmail.com) in the Email Address field, and click Next. 6 Select IMAP as the type of incoming server you are using. Enter imap.gmail.com in the Incoming Server field. etc. Expected result: Just select Tools &gt; Account Settings &gt; Add Account &gt; Gmail and then select IMAP or POP access</description>
+      <attachments>
+        <attach>proposed fix, v2</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>400949</id>
+      <title>Build Lightning with Sunbird</title>
+      <description>Although building lightning with sunbird per --enable-extension works well for me, it seems not to be the way how we build lightning in the tinderboxen: lightning's mozconfigs are based on thunderbird. Grepping thru the calendar tree for MOZ_SUNBIRD, it shows we've some places where we distinct lightning from sunbird by build variable (not dynamically). MOZ_SUNBIRD: 8:#ifdef MOZ_SUNBIRD ./locales/jar.mn 64:ifdef MOZ_SUNBIRD ./locales/Makefile.in 185:RCFLAGS += -DMOZ_SUNBIRD -I$(srcdir) 187:RCFLAGS += -DMOZ_SUNBIRD --include-dir $(srcdir) 203:RCFLAGS += -DMOZ_SUNBIRD ./sunbird/app/Makefile.in This bug should clarify what's missing to safely build lightning with sunbird.</description>
+      <attachments>
+        <attach>work in progress -- branch</attach>
+        <attach>[trunk] make webdav use static CRT on windows</attach>
+        <attach>[branch] force webdav as shared lib, remove STATIC_EXTRA_LIBS for libical</attach>
+        <attach>[branch+trunk] build calbscmp as shared lib, correct packages-static</attach>
+        <attach>[branch+trunk] build calbscmp as shared lib, correct packages-static</attach>
+        <attach>[lightning] don't package storage any longer</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401262</id>
+      <title>Add Certicámara S.A. root CA cert</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Build Identifier: Certificate data for the CA certificates requested for inclusion: http://www.certicamara.com/certicamara.crt http://www.certicamara.com/ac_offline_raiz_certicamara.crt http://www.certicamara.com/ac_online_subordinada_certicamara.crt All three certificates issues certificates for each of the following purposes o SSL-enabled servers o digitally-signed and/or encrypted email o digitally-signed executable code objects Certificate Policy and Certification Practice Statement: http://www.certicamara.com/dpc http://www.certicamara.com/templates/cc/images/dpc/DPC_Octubre_de_2007.pdf information as to how the CA has fulfilled the requirements stated above regarding its verification of certificate signing requests and its conformance to a set of acceptable operational criteria: https://cert.webtrust.org/ViewSeal?id=441 CA Details ---------- CA Name: CERTICAMARA S.A. Website: www.certicamara.com One Paragraph Summary of CA, including the following: - General nature: Commercial - Primary geographical area(s) served: Colombia and Andean Region - Number and type of subordinate CAs: 1 Subordinate CA Audit Type (WebTrust, ETSI etc.): WebTrust Auditor: Deloitte &amp; Touche Auditor Website: www.deloitte.com Audit Document URL(s): https://cert.webtrust.org/SealFile?seal=441&amp;file=pdf URL of certificate hierarchy diagram: Certificate Details ------------------- certicamara.crt Certificate Name: Certificado Empresarial Clase-A Summary Paragraph, including the following: This is the unique root certificate authorized by Industry &amp; Commerce Department of Colombia, also is approved by WebTrust Seal. We are authorized to issue certificates with the following purpose: o SSL-enabled servers o digitally-signed and/or encrypted email o digitally-signed executable code objects Certificate HTTP URL (on CA website): http://www.certicamara.com/certicamara.crt Version:V3 SHA1 Fingerprint:8b 1a 11 06 b8 e2 6b 23 29 80 fd 65 2e 61 81 37 64 41 fd 11 Modulus Length (a.k.a. "key length"): RSA (2048 bits) Valid From (YYYY-MM-DD):Wed, 23 may 2001 05:00:00 p.m Valid To (YYYY-MM-DD):Mon, 23 may 2011 05:00:00 p.m. CRL HTTP URL:http://www.certicamara.com/certicamara.crl CRL issuing frequency for end-entity certificates: 3 days OCSP URL: not available Class (domain-validated, identity/organisationally-validated or EV): Certificate Policy URL: http://www.certicamara.com/dpc http://www.certicamara.com/templates/cc/images/dpc/DPC_Octubre_de_2007.pdf CPS URL: http://www.certicamara.com/dpc http://www.certicamara.com/templates/cc/images/dpc/DPC_Octubre_de_2007.pdf Requested Trust Indicators (email and/or SSL and/or code): email, SSL and code signing URL of website using certificate chained to this root (if applying for SSL): https://www.certicamara.com/ *.ALTOCOMISIONADOPARALAPAZ.GOV.CO *.PRESIDENCIA.GOV.CO *.SUPERSERVICIOS.GOV.CO *.UNE.NET.CO ADMIN.BBVAHORIZONTE.COM.CO ALCATRAZ.UIS.EDU.CO APLICA.CCB.ORG.CO APLICACIONES.ADECCO.COM.CO ATENTO.COM.CO AUTHSERV.MINHACIENDA.GOV.CO BANCAEMPRESARIAL.BANCOCAJASOCIAL.COM.CO BANCAEMPRESARIAL.COLMENA.COM.CO BANKSERVER.SHD.GOV.CO CHAT.MINEDUCACION.GOV.CO CLIENTES.ARAS.COM.CO COLIBRI.UIS.EDU.CO COMERCIO.CCB.ORG.CO CONEXION.BBVAHORIZONTE.COM.CO CORREO.COLSUBSIDIO.COM CORREO.CREDISEGURO.COM.CO correo.eltiempo.com.co CORREO.MAPFRE.COM.CO CORREO.MEDELLIN.GOV.CO CORREO.MINEDUCACION.GOV.CO CREGAS.CREG.GOV.CO DOCUTECH.SETECSA.COM DONACIONES.ACCIONSOCIAL.GOV.CO EMPLEOPUBLICO.GOV.CO ENCUESTAS.COLSEGUROS.COM ENLINEA.BANCOCAJASOCIAL.COM.CO EOLO.HOMECENTER.COM.CO EOLO2.HOMECENTER.COM.CO EROS.CORREDORES.COM ESERVICES.ETB.COM.CO ETBADMIN.ETB.NET.CO FACTURA.ETB.NET.CO FACTURA.TELECOM.NET.CO FCV.ORG GESTION.PYMESETB.COM GPNBA.ETB.NET.CO HTTP2.TELEDATOS.COM.CO INTERNETHOGARES.UNE.COM.CO INTERNETPREPAGO.UNE.NET.CO INTRANET INTRANET.AVIANCA.COM ISA.CIAT.CGIAR.ORG JUEGOS.ETB.NET.CO LOGIN.SUPERFINANCIERA.GOV.CO LOSSCONTROL.COLSEGUROS.COM MAIL.CO.CONVERGENCE-I.COM MDEVBV01W3 MUISCA.DIAN.GOV.CO ORFEO.ACCIONSOCIAL.GOV.CO PAGOS.ETB.COM.CO PORTAL.AGRICOLADESEGUROS.COM.CO PORTAL.COLSEGUROS.COM PORTAL.JLTCOLOMBIA.COM PORTAL.MAPFRE.COM.CO REDEBANMULTICOLOR.COM.CO SAWA.USC.EDU.CO SEGURO.FIDUCAFE.COM.CO SEGURO.THOMAS-TDV.COM SERVICIOS.GASNATURAL.COM.CO SERVICIOS.SSI-SURAMERICANA.COM SIRI.PROCURADURIA.GOV.CO SSIO.ICONTEC.ORG.CO STORE.SONYSTYLE.COM.CO SVCNET.HOCOL.COM.CO TELEVISIONHOGARES.UNE.COM.CO TIENDA.ETB.NET.CO TODONET.UNE.NET.CO TRANSACCIONES.CORFICOLOMBIANA.COM TRANSACCIONES.CORFICOLOMBIANA.COM.CO VENTAS.CANALCARACOL.COM VIRTUAL.COMFENALCOVALLE.COM.CO WEBCOMERCIO.UNE.NET.CO WEBCV.ETB.COM.CO WEBSERVER2.DELOITTE.COM.CO WINTERNO.CERTICAMARA.COL WSDELIMA.COLSEGUROS.COM WSERVICES.BANCODEBOGOTA.COM.CO WWW.AFILIACIONESPDA.NET WWW.AGRICOLADESEGUROS.COM WWW.ARCEC.COM.CO WWW.AUDIFARMA.COM.CO WWW.AVANTEL.COM.CO WWW.BANCAINTERACTIVA.BANCOCAJASOCIAL.COM.CO WWW.BANCODECREDITO.COM.CO WWW.BOLNET.COM.CO WWW.BONOSPENSIONALES.GOV.CO WWW.BRINKSCOLOMBIA.COM.CO WWW.CAMARADIVISAS.COM WWW.CANAPRO.ORG.CO WWW.CAVIPETROL.COM WWW.CCCP.ORG.CO WWW.CELLSTAR.COM.CO WWW.CENTERGROUP.STRATTEGI.COM WWW.CIOH.ORG.CO WWW.CODENSA.COM.CO WWW.COLSANITAS.COM WWW.CREDIMAPFRE.COM.CO WWW.DIMAR.MIL.CO WWW.EFECTIVO.COM.CO WWW.ENLACE-APB.COM WWW.EN-LINEA.COLMENA.COM.CO WWW.ENLINEAEMPRESARIAL.COLMENA.COM.CO WWW.ENSOBRAMATIC.COM WWW.ESBUS.TRANSFIRIENDO.COM WWW.FACTORINGMARKET.NET WWW.FESA.COM.CO WWW.FONDOSDEINVERSIONBOLIVAR.COM WWW.GESTIONESYCOBRANZAS.COM WWW.HFS.COM.CO WWW.HOTELOPERA.COM.CO WWW.INVERSORA.COM.CO WWW.INVESA.COM.CO WWW.ISS.GOV.CO WWW.JCCCONTA.GOV.CO WWW.LASEGURIDAD.WS WWW.MAPFRE.COM.CO WWW.MICOMPANIA.COM.CO WWW.PANAMERICANA-OUTSOURCING.COM.CO WWW.PARSERVI.COM WWW.PASTEURLAB.COM WWW.PROV-CARREFOUR.COM.CO WWW.ROYAL-TEC.COM WWW.SCHNEIDERONLINE.COM.CO WWW.SHD.GOV.CO WWW.SICEX.COM WWW.SKANDIA.COM.CO WWW.SOCIEDADESBOLIVAR.COM.CO WWW.SPRBUN.COM WWW.STRATTEGI.COM WWW.SUBOCOL.COM WWW.SUI.GOV.CO WWW.SUPERFINANCIERA.GOV.CO WWW.TELEDATOSZF.COM WWW.UIS.EDU.CO WWW.ULTRABURSATILES.COM WWW.XMARTLINK.COM WWW2.SUAPORTE.COM.CO WWW3.SUAPORTE.COM.CO Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>File with answers</attach>
+        <attach>Completed Information Gathering Document</attach>
+        <attach>Completed Information Gathering Document</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401293</id>
+      <title>Do not request IMAP capability command if server announce it in greetings</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Build Identifier: version 2.0.0.6 (20070728) Many IMAP servers can announce their capability in greetings. TB must not request capability command if server already announce it in greetings. At least there should be option force it on or off. Reproducible: Always Steps to Reproduce: 1. Start your favorite sniffer to cap packets 2. Run TB 3. Analyze packets in sniffer 4. Look for capability request even if server show already capability before.</description>
+      <attachments>
+        <attach>Unbitrotted version of my last patch</attach>
+        <attach>New version of my last patch done with Mercurial</attach>
+        <attach>Patch that addresses Karsten's feedback in comment #22.</attach>
+        <attach>Patch that addresses Karsten's feedback in comment #24.</attach>
+        <attach>Patch that addresses Karsten's feedback in comment #29.</attach>
+        <attach>New patch that fixes bogus comment</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401322</id>
+      <title>missing "Text Size" zoom feature, Full page zoom should be an option not replacement</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 As we can see in the latest trunk (Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9a9pre) Gecko/2007102605 Minefield/3.0a9pre), text size zoom is replaced with full page zoom, and there is no way to return usual text size zoom. But for many people (including yours faithfully) full page zoom is completely useless and moreover UNUSABLE. It's even often is one of reasons for people to prefer Firefox to Opera -- they just want to increase text size -- not images, not layout at all, text only -- for more comfortable READING only, not for any another purposes. Text size zoom is really advantageous distinction of Firefox from any other browser. So, if full page zoom will be turned on by default then an option to return old behavior should exist. (Though, in my humble opinion, expediency of turning full page zoom by default is VERY questionable, and ZOOM should be an option [for some Opera switchers, etc.] -- and text size turned on by default as it was in previous Firefox versions). Subject options, for example, may look like two radiobuttons in "View" -&gt; "Zoom" menu: - Zoom text only - Zoom full page with former option checked by default. This may be duplicated in hierarchy of main Firefox settings if needed (perhaps someplace in "Tools" -&gt; "Options" -&gt; "Content"). Thanks. Reproducible: Always Steps to Reproduce: Just try to resize text only -- you will get full page zoom instead. Then search for option to return old behavior -- there is nothing ways to do it. Actual Results: Text size zoom is replaced with full page zoom. Expected Results: Full page zoom should be an option, not default and only way to zoom text.</description>
+      <attachments>
+        <attach>complete patch v1</attach>
+        <attach>complete patch v1.1</attach>
+        <attach>complete patch v1.2</attach>
+        <attach>[checked in] patch v1.3 (l10n part)</attach>
+        <attach>patch v1.3 (code + ui)</attach>
+        <attach>patch v1.3a (code + ui)</attach>
+        <attach>patch v1.4 (code + ui)</attach>
+        <attach>patch v1.5 (code + ui)</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401417</id>
+      <title>Add an option for a search box in SeaMonkey toolbar</title>
+      <description>User-Agent: Opera/9.24 (Windows NT 5.1; U; en) Build Identifier: It is possible to type a search string in the location bar and click "Search", but it's not very "familiar", at least for new users. It would be a good thing to have a search box in the place of the "Search" button in the right-hand side. This way you type your text and hit "Enter", like in other popular browsers. Reproducible: Always</description>
+      <attachments>
+        <attach>WIP 2: update to checked-in OpenSearch code</attach>
+        <attach>v1: add optional search box</attach>
+        <attach>v2: address all comments I could address</attach>
+        <attach>v2.1: also fix the search suggestion/history popup</attach>
+        <attach>v2.2: style "suggestions" comment and add modern support</attach>
+        <attach>v2.3: address another round of comments</attach>
+        <attach>v2.4: fix the last few comments</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401587</id>
+      <title>add Comodo EV root certificates</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.04506.30) Build Identifier: Please could you: Add one new CA certificate to the Mozilla Root program for us. Amend the Trust Indicators associated with our CA certificates. Enable our root certificates for EV. The CA Details are in the "Additional Information" section. This has details of 11 CA certificates which are already in your root program plus one we would like to add. Regards Robin Alden Comodo CA Limited Reproducible: Always CA Details ---------- CA Name: Comodo CA Ltd Website: www.comodo.com One Paragraph Summary of CA: The Comodo companies provide the infrastructure that is essential in enabling e-merchants, other Internet-connected companies, software companies, and individual consumers to interact and conduct business via the Internet safely and securely. The Comodo companies offer PKI SSL, Code Signing, Content Verification and E-Mail Certificates; award winning PC security software; vulnerability scanning services for PCI Compliance; secure e-mail and fax services. Continual innovation, a core competence in PKI, and a commitment to reversing the growth of Internet-crime distinguish the Comodo companies as vital players in the Internet's ongoing development. Comodo secures and authenticates online transactions and communications for over 200,000 business customers and 3,000,000 users of our desktop security products. Comodo CA Ltd. is a commercial CA. Although we are a UK Limited Company we deal with customers throughout the world both directly and through partners. We have 124 subordinate CAs signed by the root CAs listed below. Some of them exist to differentiate between different Comodo brands or products and some are used to re-brand products for our partners. In each case we retain the private key for the subordinate CA within our infrastructure. Audit Type (WebTrust, ETSI etc.): WebTrust for Certification Authorities (CAs) Auditor: KPMG LLP 1 The Embankment Neville Street Leeds LS1 4DW United Kingdom Auditor Website: http://www.kpmg.co.uk Audit Document URL(s): https://cert.webtrust.org/SealFile?seal=636&amp;file=pdf http://www.comodo.com/repository/ev_audit_report_and_management_assertions.pdf Certificate Details ------------------- Certificate Name: AddTrust Class 1 CA Root Certificate URL: http://crt.comodoca.com/AddTrustClass1CARoot.crt Version: X.509v3 SHA1 Fingerprint: CCAB0EA04C2301D6697BDD379FCD12EB24E3949D MD5 Fingerprint: 1E42950233926BB95FC07FDAD6B24BFC Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2000-05-30 Valid To (YYYY-MM-DD): 2020-05-30 CRL URL: http://crl.comodoca.com/AddTrustClass1CARoot.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 - Enable the "code" Trust Indicator ) Certificate Name: AddTrust External CA Root Certificate URL: http://crt.comodoca.com/AddTrustExternalCARoot.crt Version: X.509v3 SHA1 Fingerprint: 02FAF3E291435468607857694DF5E45B68851868 MD5 Fingerprint: 1D3554048578B03F42424DBF20730A3F Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2000-05-30 Valid To (YYYY-MM-DD): 2020-05-30 CRL URL: http://crl.comodoca.com/AddTrustExternalCARoot.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 ) Certificate Name: AddTrust Public CA Root Certificate URL: http://crt.comodoca.com/AddTrustPublicCARoot.crt Version: X.509v3 SHA1 Fingerprint: 2AB628485E78FBF3AD9E7910DD6BDF99722C96E5 MD5 Fingerprint: C1623E23C582739C03594B2BE977497F Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2000-05-30 Valid To (YYYY-MM-DD): 2020-05-30 CRL URL: http://crl.comodoca.com/AddTrustPublicCARoot.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 - Ensure that all 3 Trust Indicators are enabled, 'cos they have been disabled in some versions of Netscape/Mozilla/Firefox!! ) Certificate Name: AddTrust Qualified CA Root Certificate URL: http://crt.comodoca.com/AddTrustQualifiedCARoot.crt Version: X.509v3 SHA1 Fingerprint: 4D2378EC919539B5007F758F033B211EC54D8BCF MD5 Fingerprint: 27EC3947CDDA5AAFE29A016521A94CBB Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2000-05-30 Valid To (YYYY-MM-DD): 2020-05-30 CRL URL: http://crl.comodoca.com/AddTrustQualifiedCARoot.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 ) Certificate Name: UTN - DATACorp SGC Certificate URL: http://crt.comodoca.com/UTN-DATACorpSGC.crt Version: X.509v3 SHA1 Fingerprint: 58119F0E128287EA50FDD987456F4F78DCFAD6D4 MD5 Fingerprint: B3A53E77216DAC4AC0C9FBD5413DCA06 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 1999-06-24 Valid To (YYYY-MM-DD): 2019-06-24 CRL URL: http://crl.comodoca.com/UTN-DATACorpSGC.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 - Enable the "email" and "code" Trust Indicators ) Certificate Name: UTN-USERFirst-Client Authentication and Email Certificate URL: http://crt.comodoca.com/UTN-USERFirst-ClientAuthenticationandEmail.crt Version: X.509v3 SHA1 Fingerprint: B172B1A56D95F91FE50287E14D37EA6A4463768A MD5 Fingerprint: D7343DEF1D270928E131025B132BDDF7 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 1999-07-09 Valid To (YYYY-MM-DD): 2019-07-09 CRL URL: http://crl.comodoca.com/UTN-USERFirst-ClientAuthenticationandEmail.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 - Enable the "SSL" and "code" Trust Indicators ) Certificate Name: UTN-USERFirst-Hardware Certificate URL: http://crt.comodoca.com/UTN-USERFirst-Hardware.crt Version: X.509v3 SHA1 Fingerprint: 0483ED3399AC3608058722EDBC5E4600E3BEF9D7 MD5 Fingerprint: 4C5641E50DBB2BE8CAA3ED1808AD4339 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 1999-07-09 Valid To (YYYY-MM-DD): 2019-07-09 CRL URL: http://crl.comodoca.com/UTN-USERFirst-Hardware.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 - Enable the "email" and "code" Trust Indicators ) Certificate Name: UTN-USERFirst-Object Certificate URL: http://crt.comodoca.com/UTN-USERFirst-Object.crt Version: X.509v3 SHA1 Fingerprint: E12DFB4B41D7D9C32B30514BAC1D81D8385E2D46 MD5 Fingerprint: A7F2E41606411150306B9CE3B49CB0C9 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 1999-07-09 Valid To (YYYY-MM-DD): 2019-07-09 CRL URL: http://crl.comodoca.com/UTN-USERFirst-Object.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 - Enable the "email" and "SSL" Trust Indicators ) Certificate Name: AAA Certificate Services Certificate URL: http://crt.comodoca.com/AAACertificateServices.crt Version: X.509v3 SHA1 Fingerprint: D1EB23A46D17D68FD92564C2F1F1601764D8E349 MD5 Fingerprint: 497904B0EB8719AC47B0BC11519B74D0 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2004-01-01 Valid To (YYYY-MM-DD): 2028-12-31 CRL URL: http://crl.comodoca.com/AAACertificateServices.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 ) Certificate Name: Secure Certificate Services Certificate URL: http://crt.comodoca.com/SecureCertificateServices.crt Version: X.509v3 SHA1 Fingerprint: 4A65D5F41DEF39B8B8904A4AD3648133CFC7A1D1 MD5 Fingerprint: D3D9BDAE9FAC6724B3C81B52E1B9A9BD Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2004-01-01 Valid To (YYYY-MM-DD): 2028-12-31 CRL URL: http://crl.comodoca.com/SecureCertificateServices.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 ) Certificate Name: Trusted Certificate Services Certificate URL: http://crt.comodoca.com/TrustedCertificateServices.crt Version: X.509v3 SHA1 Fingerprint: E19FE30E8B84609E809B170D72A8C5BA6E1409BD MD5 Fingerprint: 911B3F6ECD9EABEE07FE1F71D2B36127 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2004-01-01 Valid To (YYYY-MM-DD): 2028-12-31 CRL URL: http://crl.comodoca.com/TrustedCertificateServices.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is already present in the Mozilla Root Program, but we want the following changes... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 ) Certificate Name: COMODO Certification Authority Certificate URL: http://crt.comodoca.com/COMODOCertificationAuthority.crt Version: X.509v3 SHA1 Fingerprint: 6631BF9EF74F9EB6C9D5A60CBA6ABED1F7BDEF7B MD5 Fingerprint: 5C48DCF74272EC56946D1CCC71358075 Modulus Length (a.k.a. "key length"): 2048-bit RSA Valid From (YYYY-MM-DD): 2006-12-01 Valid To (YYYY-MM-DD): 2029-12-31 CRL URL: http://crl.comodoca.com/COMODOCertificationAuthority.crl OCSP URL: it will be http://ocsp.comodoca.com Class (domain-validated, identity-validated or EV): All 3 Requested Trust Indicators (email and/or SSL and/or code): All 3 (This Root Certificate is *not* yet present in the Mozilla Root Program. Please also... - Enable it for EV - our EV Policy OID is 1.3.6.1.4.1.6449.1.2.1.5.1 )</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>401660</id>
+      <title>when showing autocomplete result, show tags that partially match</title>
+      <description>when showing autocomplete result, show tags that partially match I was telling dan mills that for autocomplete results, if you have an exact match with a tag, we'll show you the tagged items (at the top of your autocomplete results) here's an idea for an enhancement: when typing "fire", if there is no "fire" tag, show an item corresponding to any tags that might match this text as the topmost result, like: "firefly firefox fireman". if you have no tags, you won't see anything. but if you use tags, this might prove a useful way to find tagged items (in case you don't remember what your tags are called.)</description>
+      <attachments>
+        <attach>screenshot of v1</attach>
+        <attach>v1.1</attach>
+        <attach>v1.2</attach>
+        <attach>v2</attach>
+        <attach>v2.1</attach>
+        <attach>v2.2</attach>
+        <attach>v2.3</attach>
+        <attach>v2.4</attach>
+        <attach>v2.3 -&gt; v2.4 interdiff</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401673</id>
+      <title>Add support for IMAP COMPRESS Extension - rfc4978</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Build Identifier: Seems very new extension but worth adding it in future. Reproducible: Always</description>
+      <attachments>
+        <attach>this time with the newly created files included</attach>
+        <attach>fix condstore breakage</attach>
+        <attach>tidy up initialisation and incorrect usage checking</attach>
+        <attach>tweaks so far</attach>
+        <attach>get it building on mac</attach>
+        <attach>combine "build on mac" with nsMsgCompress* files</attach>
+        <attach>fix windows build issues...</attach>
+        <attach>rewrite compression/decompress paths to simplify buffer use</attach>
+        <attach>bring up to date against trunk.</attach>
+        <attach>use Z_SYNC_FLUSH instead of Z_FULL_FLUSH</attach>
+        <attach>now with better "Available()" values and cleaner error checking</attach>
+        <attach>use nsIAsyncInputStream as the input base class</attach>
+        <attach>use nsRefPtr, add some QI's, and use NS_ENSURE_SUCCESS(rv, rv)</attach>
+        <attach>and add nsIInputStream to the interfaces that icompress stream implements</attach>
+        <attach>code review changes plus be _really_ strict about zlib logic and error checking</attach>
+        <attach>Check for Z_BUF_ERROR condition and return code of DoInflation()</attach>
+        <attach>patch without the QI's in ::BeginCompress</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>401779</id>
+      <title>Integrate Lightning Into Thunderbird by Default and Ship Thunderbird with Lightning Enabled</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9a9pre) Gecko/2007102903 SeaMonkey/2.0a1pre Build Identifier: This is the bug which Bug 349870 – Build Thunderbird with preinstalled Lightning was intended to be. It is to actually build a shipping product of Thunderbird with integral Lightning with no further work necessary by end users. This should be a complete build one can download from the web site. There should be a choice of whether to install Lightning which is selectable by a check box. Reproducible: Always Steps to Reproduce: Download Thunderbird. Actual Results: No Lightning installed. Expected Results: Thunderbird with Lightning installed by default or by checkbox at install time. No additional information at this time.</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>401928</id>
+      <title>Support generalized PKCS#5 v2 PBEs</title>
+      <description>Currently NSS only supports PKCS #5 v1 and PKCS #12 PBE algorithms. PKCS #5 v2 defines a generalized PBE algorithm that can be used with any encryption or mac scheme. NSS supports PKCS #5 at the softoken level, but not in the generalized PBE parameters.</description>
+      <attachments>
+        <attach>Implement pkcs 5 in the pk11 wrap layer.</attach>
+        <attach>Use the pkcs 5 v2 compatible interfaces in CMS/pkcs7 and pkcs12</attach>
+        <attach>pk12util patch, v1</attach>
+        <attach>screen shot, enlarged, showing one == ell</attach>
+        <attach>screen shot with a different font and a different story;)</attach>
+        <attach>Update softoken patch according to review comments</attach>
+        <attach>Implement pkcs 5 in the pk11 wrap layer. - V2</attach>
+        <attach>Unified diff: Use the pkcs 5 v2 compatible interfaces in CMS/pkcs7 and pkcs12</attach>
+        <attach>Use the pkcs 5 v2 compatible interfaces in CMS/pkcs7 and pkcs12 - V2</attach>
+        <attach>Use the pkcs 5 v2 compatible interfaces in CMS/pkcs7 and pkcs12 - V3</attach>
+        <attach>Fix tinderbox bustage...</attach>
+        <attach>program to demostrate to pkcs12 decode issue</attach>
+        <attach>alternative patch for pk12util (checked in)</attach>
+        <attach>patch to fix assertion failure</attach>
+        <attach>patch to fix assertion failures and other crashes</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402278</id>
+      <title>Download activity summary in the status bar</title>
+      <description>Created attachment 287165 [details] v1 mockup of download summary information in the status bar It would be a useful accompaniment to the Downloads Manager if there were a summary of current download activity in the Firefox statusbar. Clicking on this summary could launch or bring to the foreground the Downloads Manager itself. This area would simply not be present if no download activity were in progress. See the accompanying mockup for an idea of how this could look and work. A note about the mockup: The rolled-up summary "time remaining" would be the greatest time remaining for any individual active (non-paused) download, given that they're happening in parallel.</description>
+      <attachments>
+        <attach>Patch for Bug #402278</attach>
+        <attach>v2</attach>
+        <attach>screenshot</attach>
+        <attach>v2.1</attach>
+        <attach>v2.2</attach>
+        <attach>v2.3 strings</attach>
+        <attach>v2.3 code</attach>
+        <attach>screenshot of v2.3</attach>
+        <attach>screenshot of v2.3</attach>
+        <attach>v2.4 code</attach>
+        <attach>v2.5 code</attach>
+        <attach>bustage fix</attach>
+        <attach>odd location of page load progress bar</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402392</id>
+      <title>Support other message storage formats.  (prelude to pluggable mail stores)</title>
+      <description>Per a discussion on IRC (on a weekend, unfortunately), an idea was raised to have pluggable file format supports for message storage. Questions I had: 1. What level should this be? Compile-time, profile, account, or folder ? 2. Which format should be the default? 3. What formats should we support? 4. What scope should we have for choices? Choosing *.msf/*.mab formats as well? jwq's answers: 1. mailbox storage formats should be choosable on a per-account basis at account setup time. In an ideal word, they'd be changeable after this as well. 2. mbox should be the default for the reason set out in &lt;http://www.jwz.org/doc/mailsum.html&gt; and the pro-mbox arguments in Bug 58308 and Bug 361807. Basically, compatibility. 3. We should support whatever we (i.e. you guys :-) ) can code. There are requests for maildir and SQLite db. 4. The .msf format should change with the account choice. The only strong opinion on .mab I have is that it shouldn't be mork.</description>
+      <attachments>
+        <attach>adds support for message move/copy, and updating of message flags</attach>
+        <attach>add support for changing keywords, pop3 uidl handling, call copy method</attach>
+        <attach>add rebuild index, offline store support</attach>
+        <attach>get last patch to compile</attach>
+        <attach>hook up compact to the pluggable store</attach>
+        <attach>minor tweaks, fix creation of new offline stores</attach>
+        <attach>add FinishNewMessage method, clear out unused code</attach>
+        <attach>add some missing calls to FinishNewMessage()</attach>
+        <attach>cumulative mailnews diffs</attach>
+        <attach>cumulative mail and mailnews patch</attach>
+        <attach>patch for review</attach>
+        <attach>fix movemail bustage and address drive by comments</attach>
+        <attach>address most of the review comments</attach>
+        <attach>de-bitrotted patch</attach>
+        <attach>oops, wrong patch - de-bitrotted for real</attach>
+        <attach>fix mozmill tests, and address more review comments</attach>
+        <attach>address most of the prev comments</attach>
+        <attach>address more review comments</attach>
+        <attach>leave old timeout in for folder compact test</attach>
+        <attach>standard8 points out that I inadvertently removed mailnewsMigrator.js</attach>
+        <attach>address review comments</attach>
+        <attach>fix offline store copying of imap messages</attach>
+        <attach>fix addressing comments</attach>
+        <attach>fix some unit tests and marking messages read</attach>
+        <attach>suite part</attach>
+        <attach>fix bustage in test_bug457168.js</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402407</id>
+      <title>PNGs can be re-compressed further.</title>
+      <description>Had some time (again) to scrutinize the calendar folder of the 0.7 release source to re-compress the PNGs. Used PNGGauntlet with brute-force option. ----------- Total sizes ----------- Before: 768,574 bytes After: 724,350 bytes Decreased by 44,224 bytes, &gt;5%. Not *that* significant, but worth considering.</description>
+      <attachments>
+        <attach>"prototypes" folder of calendar folder of 0.7 source</attach>
+        <attach>the rest of calendar folder of 0.7 source</attach>
+        <attach>7z file containing png files in base/</attach>
+        <attach>7z file containing png files in the other folders</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402518</id>
+      <title>Enhance storage provider to store foreign timezones</title>
+      <description>The storage provider needs to self host foreign timezone definitions used in its stored calendar items. Foreign timezone definitions are not available via the (yet to come) reference timezone service (aka the Olson set).</description>
+      <attachments>
+        <attach>calStorageCalendar part</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402520</id>
+      <title>[10.5] Make download stack bounce upon finished download</title>
+      <description>See bug 384068 comment 11: When Apple downloads something into the new Leopard Download folder, it makes it bounce in the dock. We should do that too. (Yet this is a teeny little enhancement, and not really part of bug 384068).</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>402614</id>
+      <title>Study JS string length populations and lifetimes (was: Fat small string)</title>
+      <description>The current representation for strings in SpiderMonkey is 2-word JSString structure that points to separately allocated array with 2-byte chars. For small strings this is wasteful. So it would be nice to introduce/implement a special string type that allocates the chars together with JSString header.</description>
+      <attachments>
+        <attach>patch</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402650</id>
+      <title>make secure location bar (https) background something other than yellow</title>
+      <description>We've tossed this around a few times - filing to keep on the radar. We should consider making the background color for the location bar something other than yellow at secure sites. a secure site -&gt; be confident yellow -&gt; be cautious</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>402712</id>
+      <title>Add PKCS#11 PEM Reader</title>
+      <description>Created attachment 287539 [details] The PKCS#11 module Red Hat requires a PKCS#11 module that can read PEM files in the OS NSS package it ships. Code is attached. Please let's get this done prior to the NSS 3.12 release.</description>
+      <attachments>
+        <attach>Patch to enable building the module</attach>
+        <attach>cvs -Nup diff</attach>
+        <attach>small patch to fix memory allocation problem on 64-bit machines</attach>
+        <attach>patch to fix +/-1 problem in pem/pobject.c</attach>
+        <attach>PEM module rev1</attach>
+        <attach>PEM module rev2</attach>
+        <attach>PEM module rev</attach>
+        <attach>WIP pem module test application</attach>
+        <attach>PEM pkcs11 module</attach>
+        <attach>shell script to fix whitespace</attach>
+        <attach>WIP pem module</attach>
+        <attach>pem module test application</attach>
+        <attach>pem module</attach>
+        <attach>pem module V4: partial implementation</attach>
+        <attach>Patch V5 - partial progress</attach>
+        <attach>output of interdiff of reviewed to previous</attach>
+        <attach>output of interdiff previous to current</attach>
+        <attach>interdiff last_reviewed to under_review</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402892</id>
+      <title>Switch from gnome-vfs to GIO</title>
+      <description>User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9a9pre) Gecko/2007110718 Firefox/3.0a9pre Build Identifier: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9a9pre) Gecko/2007110718 Firefox/3.0a9pre Currently firefox compiles against system gnome-vfs and it seems to work fine. Under gnome 2.22, a migration to GVFS/gio is going to happen. I'm assuming distributions will ship GVFS instead of gnome-vfs. How will firefox handle the swtch to GVFS? A gvfs release is available here http://ftp.gnome.org/pub/GNOME/sources/gvfs/0.0/ http://ftp.gnome.org/pub/GNOME/sources/gio-standalone/0.1/ Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Patch v2: fixed headers and added missing idl file</attach>
+        <attach>Replace GnomeVFSService by GIOService in rest of the source code</attach>
+        <attach>Patch v3: removed unused parts</attach>
+        <attach>Patch v4: fixed leaks, using dlsym</attach>
+        <attach>Patch v4: keep GnomeVFS and g_content_type_from_mime_type workaround</attach>
+        <attach>Patch v6: do not enable gio by default, removed wince makefile [Checkin: Comment 56]</attach>
+        <attach>system-headers bustage fix [Checkin: Comment 59]</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402947</id>
+      <title>Add VeriSign G5 EV root certificate</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.8) Gecko/20071008 Firefox/2.0.0.8 Please accept this VeriSign EV root certificate for inclusion in Firefox: -----BEGIN CERTIFICATE----- MIIE0zCCA7ugAwIBAgIQGNrRniZ96LtKIVjNzGs7SjANBgkqhkiG9w0BAQUFADCB yjELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQL ExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTowOAYDVQQLEzEoYykgMjAwNiBWZXJp U2lnbiwgSW5jLiAtIEZvciBhdXRob3JpemVkIHVzZSBvbmx5MUUwQwYDVQQDEzxW ZXJpU2lnbiBDbGFzcyAzIFB1YmxpYyBQcmltYXJ5IENlcnRpZmljYXRpb24gQXV0 aG9yaXR5IC0gRzUwHhcNMDYxMTA4MDAwMDAwWhcNMzYwNzE2MjM1OTU5WjCByjEL MAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZW ZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTowOAYDVQQLEzEoYykgMjAwNiBWZXJpU2ln biwgSW5jLiAtIEZvciBhdXRob3JpemVkIHVzZSBvbmx5MUUwQwYDVQQDEzxWZXJp U2lnbiBDbGFzcyAzIFB1YmxpYyBQcmltYXJ5IENlcnRpZmljYXRpb24gQXV0aG9y aXR5IC0gRzUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvJAgIKXo1 nmAMqudLO07cfLw8RRy7K+D+KQL5VwijZIUVJ/XxrcgxiV0i6CqqpkKzj/i5Vbex t0uz/o9+B1fs70PbZmIVYc9gDaTY3vjgw2IIPVQT60nKWVSFJuUrjxuf6/WhkcIz SdhDY2pSS9KP6HBRTdGJaXvHcPaz3BJ023tdS1bTlr8Vd6Gw9KIl8q8ckmcY5fQG BO+QueQA5N06tRn/Arr0PO7gi+s3i+z016zy9vA9r911kTMZHRxAy3QkGSGT2RT+ rCpSx4/VBEnkjWNHiDxpg8v+R70rfk/Fla4OndTRQ8Bnc+MUCH7lP59zuDMKz10/ NIeWiu5T6CUVAgMBAAGjgbIwga8wDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8E BAMCAQYwbQYIKwYBBQUHAQwEYTBfoV2gWzBZMFcwVRYJaW1hZ2UvZ2lmMCEwHzAH BgUrDgMCGgQUj+XTGoasjY5rw8+AatRIGCx7GS4wJRYjaHR0cDovL2xvZ28udmVy aXNpZ24uY29tL3ZzbG9nby5naWYwHQYDVR0OBBYEFH/TZafC3ey78DAJ80M5+gKv MzEzMA0GCSqGSIb3DQEBBQUAA4IBAQCTJEowX2LP2BqYLz3q3JktvXf2pXkiOOzE p6B4Eq1iDkVwZMXnl2YtmAl+X6/WzChl8gGqCBpH3vn5fJJaCGkgDdk+bW48DW7Y 5gaRQBi5+MHt39tBquCWIMnNZBU4gcmU7qKEKQsTb47bDN0lAtukixlE0kF6BWlK WE9gyn6CagsCqiUXObXbf+eEZSqVir2G3l6BFoMtEMze/aiCKm0oHw0LxOXnGiYZ 4fQRbxC1lfznQgUy286dUV4otp6F01vvpX1FQHKOtw5rDgb7MzVIcbidJ4vEZV8N hnacRHr2lVz2XTIIM6RUthg/aFzyQkqFOFSDX9HoLPKsEdao7WNq -----END CERTIFICATE----- This CA is currently used to sign certificates for SSL-enabled servers, and may in the future be used to sign certificates for digitally-signed executable code objects. The CP is at http://www.verisign.com/repository/CPS/VeriSignCPv2.5.pdf The CPS is at http://www.verisign.com/repository/CPS/VeriSignCPSv3.5.pdf Attestation of our conformance to the stated verification requirements can be found here: http://www.verisign.com/repository/index.html (Click on the "AICPA/CICA WebTrust for Certification Authorities Audit Report" link) Reproducible: Always Steps to Reproduce: n/a Actual Results: n/a Expected Results: n/a n/a</description>
+      <attachments>
+        <attach>Document contains Verisign EV OID and link to download EV root</attach>
+        <attach>VeriSign Class 3 Public Primary CA - G5 certificate</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402968</id>
+      <title>Move throbber to where the URL bar site icon (favicon) is.</title>
+      <description>Alex, beltzner, and mconnor designed this, I'm summarizing: * Remove the throbber from its current location on the toolbar. * Add throbber to where the favicon is in the URL bar. * The throbber, like the favicon and the URL, is tied to the tab being shown. * While the page is loading, you see the throbber, and when it finishes you get the favicon. [Just like how the throbber/icon on tabs currently works.] Why: * Brings load activity closer to the UI that affects throbbing (eg Stop, enter a URL, forward/back/reload). * A throbber here is useful for indicating activity as a Places search runs (as you're typing in the field) * One less icon in the primary UI (favicon is now overloaded, no standalone throbber) Known nits: * The "inactive throbber" state ceases to exist. [More precisely, a favicon is shown when the throbber is inactive.] This is highly desirable for integration consistency on OS X. * The throbber is no longer global, so if the only tab loading is hidden in tab overflow, there's no at-a-glance activity indication. * The favicon can load before the page is finished loading, but won't be shown until the page finishes loading and the throbber stops. Stalled loads would be the worst example of this. * This could be perceived as a flashing effect, where navigating within a site causes icon --&gt; throbber --&gt; icon --&gt; throbber --&gt; icon, etc. We already flash a little between the site icon and generic icon, although it can be subtle.</description>
+      <attachments>
+        <attach>Patch for review, v.1</attach>
+        <attach>WinXP screenshot</attach>
+        <attach>Patch for review, v.2</attach>
+        <attach>Screenshots on Vista</attach>
+        <attach>Patch for review, v.3</attach>
+        <attach>Patch for review, v.4</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>402981</id>
+      <title>support Windows Contacts (Vista address book)</title>
+      <description>Thunderbird provides some read-only support for Outlook Express and Outlook via hidden LDAP preferences, but it's not very good, and it requires that Outlook is the default mail program, which kind of defeats the purpose. There's a new read-write API to access the Windows Contacts in Windows Vista. It would be great to support that. Also need to consider the preferences UI (see bug 83100).</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>403075</id>
+      <title>Update disk image background</title>
+      <description>We should update our dmg to include an Applications alias like many other apps have done and has now become semi standard. I know there was some argument over this in the past, but more and more those arguments don't seem as strong (I was one of the ones arguing against it previously). We should also update the image and potentially the dmg icon.</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>403222</id>
+      <title>Pattern matching / natural language parsing in e-mail for dynamic event creation</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 Build Identifier: version 2.0.0.6 (20070728) I think it would be great to see a kind of basic pattern matching engine in the Lightning codebase that scans incoming emails for possible event info, and upon reading the e-mail, attempts to dynamically construct an event instance from the information in the e-mail, which can then be changed/customized if necessary, and then added to one of the users Lightning calendars. Google Calendar has functionality similar to this. Mockup will be forthcoming. Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>part one</attach>
+        <attach>part one</attach>
+        <attach>part one - v2</attach>
+        <attach>part one - v2 with improved comments</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403239</id>
+      <title>Update libpng to version 1.2.23 and reduce libpng footprint</title>
+      <description>Created attachment 288039 [details] [diff] [review] Update trunk to libpng-1.2.23 and reduce libpng footprint (use patch -E) libpng-1.2.23 has been released. No bugs were involved. There is an opportunity to reduce the libpng footprint by about 11 kbytes, by removing unused warning and error text when PR_LOGGING is off. The method is demonstrated in the contrib/pngminim directory of the libpng distribution. pnggccrd.c and pngvcrd.c are no longer used so they can be removed, and the test compile of pnggccrd.c in configure.in can be eliminated. The defines of MOZ_PNG_READ and MOZ_PNG_WRITE do not need to be global, so they can be defined in the png Makefiles instead of in configure.in, thus simplifying the compile line for all *.c except for those in libpng. The png Makefile can be revised to not compile some files when png does not appear in MOZ_IMG_DECODERS and others when png does not appear in MOZ_IMG_ENCODERS. There's a spelling error ("sais" should be "says") in nsPNGDecoder.cpp .</description>
+      <attachments>
+        <attach>Update trunk to libpng-1.2.23 and reduce libpng footprint, v1 (use patch -E)</attach>
+        <attach>Update trunk to libpng-1.2.23 and reduce libpng footprint, v2 (use patch -E)</attach>
+        <attach>Update trunk to libpng-1.2.23 and reduce libpng footprint, v3 (use patch -E)</attach>
+        <attach>Update trunk to libpng-1.2.23 and reduce libpng footprint, v3a (checked in to trunk)</attach>
+        <attach>panel from http://pmt.sf.net/gamma_test</attach>
+        <attach>Before and after screenshot</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403510</id>
+      <title>Implement scrollIntoViewIfNeeded</title>
+      <description>Newer WebKit builds has a very useful method on HTMLElement called: scrollIntoViewIfNeeded(opt_center : boolean) It will scroll an element into view if it is outside the viewport. The param, if true or left out will center the element and if false it will scroll as little as possible to make the element visible in the viewport. This is very similar to scrollIntoView(opt_top) except that it will not scroll any elements if the element is already fully visible in the viewport.</description>
+      <attachments>
+        <attach>Fix more inline with Webkit's implementation.</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403563</id>
+      <title>Implement the TLS session ticket extension (STE)</title>
+      <description>Created attachment 288414 [details] [diff] [review] Proposed patch v1 We would like to implement the TLS session ticket extension as specified in the Internet-Draft draft-salowey-tls-rfc4507bis-01.txt. This extension allows session resumption without server-side state. The attached patch is contributed by Nagendra Modadugu of Google. It still needs a little polishing, but I invite you to skim through it and give us early comments. The following known issues are outside the scope of this enhancement request. 1. The server-side key management functions haven't been implemented. 2. If the server is running in the bypassPKCS11 mode, the master secret in the session ticket is unwrapped. Otherwise, the master secret in the session ticket is wrapped. Of course, the session ticket is always encrypted. The session ticket extension is disabled by default. An application needs to set an SSL socket option to enable the session ticket extension. The test programs strsclnt, tstclnt, and selfserv have a new -u command-line option to enable the session ticket extension. I added new SSL stress tests in nss/tests/ssl/sslstress.txt to test stateless resumption using session tickets.</description>
+      <attachments>
+        <attach>Sub-patch 1: refactoring TLS extension related code</attach>
+        <attach>Auxilliary diffs 1: diffs of arrays moved from ssl3ecc.c to ssl3ext.c</attach>
+        <attach>Auxilliary diffs 2: diffs of functions moved from ssl3ecc.c to ssl3ext.c</attach>
+        <attach>Diffs between the original TLS extension code (from ssl3ecc.c) and ssl3ext.c</attach>
+        <attach>Proposed patch v2</attach>
+        <attach>Proposed patch v3</attach>
+        <attach>Proposed patch v4</attach>
+        <attach>Proposed patch v5</attach>
+        <attach>Proposed patch v5.1 (by Nagendra Modadugu)</attach>
+        <attach>Proposed patch v5.2</attach>
+        <attach>Proposed patch v5.2.1 (by Nagendra Modadugu)</attach>
+        <attach>Auxilliary diffs: changes made to the TLS extension code moved from ssl3ecc.c to ssl3ext.c</attach>
+        <attach>normalized patch v4</attach>
+        <attach>normalized patch v5.2.1</attach>
+        <attach>normalized patch v5.2.1 without sslsnce.c</attach>
+        <attach>sslsnce.c subset of v5.2.1</attach>
+        <attach>Proposed patch v4, with dummy change to sslsnce.c</attach>
+        <attach>Proposed patch v5.2.1 (by Nagendra Modadugu), attached again</attach>
+        <attach>Reserve an SSL socket option for TLS session tickets</attach>
+        <attach>NSS trunk landing patch (as checked in)</attach>
+        <attach>Effective patch for NSS customers disabling TLSSTE, part 1, changes to existing files</attach>
+        <attach>Effective patch for NSS customers disabling TLSSTE, part 2</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403651</id>
+      <title>for pages that are images, store a scaled (16 x 16 px) and resampled version of the image as the favicon</title>
+      <description>for pages that are images, store a scaled (16 x 16 px) and resampled version of the image as the favicon from the code (http://lxr.mozilla.org/seamonkey/source/toolkit/components/places/src/nsFaviconService.cpp#452) // If have an image loaded in the main frame, that image will get set as its // own favicon. It would be nice to store a resampled version of the image, // but that's prohibitive for now. This workaround just refuses to save the // favicon in this case. PRBool pageEqualsFavicon; rv = page-&gt;Equals(aFavicon, &amp;pageEqualsFavicon); NS_ENSURE_SUCCESS(rv, rv); if (pageEqualsFavicon) return NS_OK; this sounds like a job for dolske's code in bug #389273</description>
+      <attachments>
+        <attach>For ImageDocuments Store Thumb As Favicon</attach>
+        <attach>For ImageDocuments Store Thumb As Favicon</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403665</id>
+      <title>Request for QuoVadis Root CA2 to be enabled for EV SSL (Extended Validation)</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 QuoVadis is a commercial certificate authority with three roots currently distributed in NSS. We request that the "QuoVadis Root CA2" be enabled for Extended Validation (EV) SSL. This root was originally approved for distribution under Bug 365281. QuoVadis Root CA2 Description: This root is used for SSL/device certificates, including standard “organisation validated” certificates as well as EV certificates. Download: http://www.quovadis.bm/public/qvrca2.crt Thumbprint: ca 3a fb cf 12 40 36 4b 44 b2 16 20 88 80 48 39 19 93 7c f7 Purposes/Usage: ALL CRL: http://crl.quovadisglobal.com/qvrca2.crl OCSP: Active The EV OID associated with Root CA2 is: 1.3.6.1.4.1.8024.0.2.100.1.2 The CP/CPS for QuoVadis Root CA2 may be found at https://www.quovadis.bm/policies/QV_RCA2_CPCPS_v1.8.pdf Among its audits and accreditations, QuoVadis holds a valid WebTrust for Certification Authorities seal. See https://cert.webtrust.org/ViewSeal?id=612 QuoVadis has completed the WebTrust for Extended Validation Certificates readiness review. See attached. The WebTrust EV procedures will be integrated into our recurring WebTrust audit. Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>403878</id>
+      <title>Replacing js_InternalCall =&gt; js_Invoke in Array.sort implementation</title>
+      <description>[This is a spin-off of bug 371636 comment 18.] Currently sort_compare from jsarray.c uses js_InternalCall to invoke the comparator function. This is suboptimal since it adds an overhead of js_AllocStack/js_FreeCall for each compare operation. It would be nice to allocate the stack only once as array_extra implementation does.</description>
+      <attachments>
+        <attach>Implementation v1a, now with less semicolons and stack-slots.</attach>
+        <attach>Implementation v1b</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403909</id>
+      <title>Provide a JS signing function that works with self-signed certificates</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; cs; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 Build Identifier: Firefox 2.0.0.9 using window.crypto.signText on and signing with certificate from the SW store returns without exception but returned string is "error:InternalError" Reproducible: Always Steps to Reproduce: 1. open attached html in Firefox 2. click on the "Sign Data" button 3. see the error text Actual Results: using window.crypto.signText on and signing with certificate from the SW store returns without exception but returned string is "error:InternalError" Expected Results: using window.crypto.signText on and signing with certificate from the SW store returns without exception and returned string contains the strign representation of digital signature same error if used with certificate stored on RSA SecurID usb token.</description>
+      <attachments>
+        <attach>initial attempt at improving signText</attach>
+        <attach>testcase</attach>
+        <attach>self-signed certificate for test case</attach>
+        <attach>updated testcase</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>403915</id>
+      <title>Add Network Solutions EV root cert</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; InfoPath.1) Build Identifier: Other CA Details ---------- CA Name: Network Solutions, LLC Website: www.networksolutions.com One Paragraph Summary of CA, including the following: - General nature (e.g., commercial, government, academic/research, nonprofit) - Primary geographical area(s) served - Number and type of subordinate CAs Network Solutions, LLC is a commercial CA based in the United States of America offering SSL Certificates to customers around the world. Currently, Network Solutions has no subordinate CAs. Audit Type (WebTrust, ETSI etc.): WebTrust Auditor: KPMG Auditor Website: www.kpmg.com Audit Document URL(s): https://cert.webtrust.org/SealFile?seal=601&amp;file=pdf Certificate Details ------------------- (To be completed once for each certificate) Certificate Name: Network Solutions Certificate Authority Summary Paragraph, including the following: - End entity certificate issuance policy This is the Network Solutions EV Root Certificate. The end entity certificate issuance policy is available at: https://www.networksolutions.com/legal/SSL-legal-repository-ev-cps.jsp Certificate URL (on CA website): http://customersupport.networksolutions.com/category.php?id=118 Version: V3 SHA1 Fingerprint: e2 34 2a ab 84 88 eb b0 88 90 1c c5 d1 11 65 be d9 e4 1d 1e MD5 Fingerprint: D3:F3:A6:16:C0:FA:6B:1D:59:B1:2D:96:4D:0E:11:2E Modulus Length (a.k.a. "key length"): 2048 bits Valid From (YYYY-MM-DD): Thursday, November 30, 2006 7:00:00 PM Valid To (YYYY-MM-DD): Saturday, May 30, 2020 5:48:38 AM CRL URL: http://crl.usertrust.com/UTN-USERFirst-Hardware.crl OCSP URL: NA Class (domain-validated, identity-validated or EV): EV EV OID: 1.3.6.1.4.1.782.1.2.1.8.1 Certificate Policy URL: http://www.networksolutions.com/legal/SSL-legal-repository-ev-cps.jsp CPS URL: http://www.networksolutions.com/legal/SSL-legal-repository-ev-cps.jsp Requested Trust Indicators (email and/or SSL and/or code): All 3 URL of website using certificate chained to this root (if applying for SSL): https://www.networksolutions.com Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>2014 Web.com SSL Baseline Audit Report Final.pdf</attach>
+        <attach>2014 Web.com WebTrust Audit Report Extended Validation Final.pdf</attach>
+        <attach>2015 Web.com WebTrust BR Audit Report.pdf</attach>
+        <attach>2015 Web.com WebTrust CA Audit Report.pdf</attach>
+        <attach>2015 Web.com WebTrust EV Audit Report.pdf</attach>
+        <attach>2016 Web.com WebTrust Audit Report.pdf</attach>
+        <attach>2016 Web.com SSL Baseline Audit Report.pdf</attach>
+        <attach>2016 Web.com WebTrust Audit Report Extended Validation.pdf</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404109</id>
+      <title>move the Home button to the Bookmarks toolbar, and reset toolbars for Firefox 3</title>
+      <description>Created attachment 289076 [details] screenshot Would be great if someone could try this on OS X: https://build.mozilla.org/tryserver-builds/2007-11-16_14:52-dgottwald@mozilla.com-1195253500/ Note that the home button will only be moved if you haven't customized your toolbars. If you have, you can either move it manually or use "Restore Default Set".</description>
+      <attachments>
+        <attach>patch</attach>
+        <attach>patch v2</attach>
+        <attach>patch v3</attach>
+        <attach>updated patch v3</attach>
+        <attach>fixed updated patch v3</attach>
+        <attach>fixed fixed updated patch v3</attach>
+        <attach>don't create duplicate items</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404130</id>
+      <title>Places: Search for URLs in location dropdown by keyword, description meta tag</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 If you type a match to a sites keyword or meta tag that you have browsed, it should pull it up the same way you can type a page title in Firefox 3. Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>404259</id>
+      <title>Make "Today" button look toggled when today is selected in the views</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 Build Identifier: "Today" button on toolbar could become selected (sunken) after click and remain selected while today is shown in Day view or is selected in Week/Month view. I think this will ease up navigation, and also look nicer. This idea was implemented in the now discontinued Ecco Pro Reproducible: Always</description>
+      <attachments>
+        <attach>today button with state "open" or "checked"</attach>
+        <attach>Linux Screenshot</attach>
+        <attach>nautilus pathbar example</attach>
+        <attach>a few examples of different styles</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404279</id>
+      <title>Suggest automatic filling of 'name' field after selecting "add a keyword for this search" from context menu.</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 I suggest automatic filling on the 'name' field after selecting "add a keyword for this search" from context menu. The name could be automatically filled in based on the name of the page (the one that appears in the title bar). Reproducible: Always Steps to Reproduce: 1. Right click in a website text box designed for sending queries. 2. Select "add a keyword for this search". 3. Notice that the 'name' field is blank. 4. Wish that it was already filled in, based on the name of the webpage in question. Actual Results: 'Name' field was blank. I had to fill it in. Expected Results: The 'name' field should have contained the name of the page in which the search box was encountered.</description>
+      <attachments>
+        <attach>Patch v1.1 (now localizable)</attach>
+        <attach>Patch v1.2 (localizable + correct variable name)</attach>
+        <attach>Patch v2 (fully localizable I hope)</attach>
+        <attach>includes the changes from comment 10</attach>
+        <attach>ready for check-in</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404390</id>
+      <title>create mobile keyword and add mobile-related OSes</title>
+      <description>The mobile project &lt;http://wiki.mozilla.org/Mobile&gt; needs a keyword "mobile". We also need to add "Mobile" to Platform and the following OS's: Windows Mobile 6 Standard Windows Mobile 6 Professional Linux Maemo</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>404402</id>
+      <title>Ship and use different sizes of the Firefox window icon</title>
+      <description>User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.8) Gecko/20071022 Ubuntu/7.10 (gutsy) Firefox/2.0.0.8 Build Identifier: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b2pre) Gecko/2007111904 Minefield/3.0b2pre Right now Firefox seems to be shipping with a handful of strangely sized application icons (at least strange for the use on a Linux desktop). There are two things that should be done: ## Provide separate icons in PNG format for the commonly used sizes 16x16, 22x22, 24x24, 32x32 and 48x48. All with nice alpha and AA. Not just scaled down versions but tweaked versions to better fir the smaller sizes. If possible, also provide a scalable version of the logo in SVG format. This would fix the look of the Application launcher in the menu. ## Don't use a fixed size icon for the window icon. The current icon (48x48?) looks very blurry in the window list (scaled down to 16x16) but looks pixelized in window previews, scale and the task switcher. GTK apps have a mechanism to pick up the right size of the icon from share/icons/hicolor/apps/$SIZE/$APPNAME.png Reproducible: Always</description>
+      <attachments>
+        <attach>48x48 icons, Patch v.1</attach>
+        <attach>48x48 icons</attach>
+        <attach>32x32 icons, Patch v.1</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404513</id>
+      <title>Add Makefile target to launch solo xpcshell test without interactive mode</title>
+      <description>Here is a patch to launch a single xpcshell test, without entering in an interactive mode. For this, there is a new target, "check-one" : make SOLO_FILE=test_mytest.js check-one</description>
+      <attachments>
+        <attach>Patch which fixes the Bz's bug</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404516</id>
+      <title>Reword "save session" dialog box displayed on closing</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b2pre) Gecko/2007112003 Minefield/3.0b2pre Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b2pre) Gecko/2007112003 Minefield/3.0b2pre I think better button names would make easier to users what is happening. Reproducible: Always Steps to Reproduce: Open to tabs and try to exit Firefox. Actual Results: Message: Do you want Minefield to save your tabs for the next time it starts? Buttons: Save Quit Cancel Expected Results: Message: What do you want Minefield to do with your current session? Buttons: Save opened tabs Don't save opened tabs Cancel</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>404525</id>
+      <title>Give more feedback to the user the first time he uses Star</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9b1) Gecko/2007110904 Firefox/3.0b1 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9b1) Gecko/2007110904 Firefox/3.0b1 It's not clear what the Star button does when Places is deleted. Speaking of which, it's also unclear where Starred things go to when places are there. Reproducible: Always Steps to Reproduce: 1. Delete places 2. Press star button Actual Results: See white star turn yellow Expected Results: Have more feedback If this is supposed to make bookmarking easier, I'm not sure how having a silent mechanism that dumps Starred thing into a subfolder of Places makes things easier.</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>404536</id>
+      <title>Right click on Web page button should be ignored (don't show context menu on web form controls except textboxes)</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b2pre) Gecko/2007112003 Minefield/3.0b2pre Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b2pre) Gecko/2007112003 Minefield/3.0b2pre Right clicking on a Web page button should be ignored; since that happens when you right click any "real" button, at least, in Windows (like Close in title bar). Often, buttons have a "What is this?" menu, but that does not relate to a Web page. Reproducible: Always</description>
+      <attachments>
+        <attach>Patch (v1.1)</attach>
+        <attach>Add user pref for right click on all form elements</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404580</id>
+      <title>Provide information like preview text, subject and sender in mail notification window - as in Thunderbird</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; hsb-DE; rv:1.8.1.9) Gecko/20071030 SeaMonkey/1.1.6 Build Identifier: Mozilla/5.0 (Windows; U; Win 9x 4.90; hsb-DE; rv:1.8.1.9) Gecko/20071030 SeaMonkey/1.1.6 It would be good if SM would have - similar as Thunderbird - more information in the mail notification window - preview text, subject and sender of the incoming mail. And it should be configurable in the preferences dialog of SM (Edit--&gt;Preferences--&gt;Mail &amp; Newsgroups --&gt;Notifications) and/or by about:config Reproducible: Always Steps to Reproduce: 1. 2. 3. Actual Results: Feature not available. Expected Results: Feature should be available in Seamonkey</description>
+      <attachments>
+        <attach>Patch v1.0 for review.</attach>
+        <attach>Patch v1.1 for review</attach>
+        <attach>Patch v1.2 Reimplement LookAndFeel::GetInt().</attach>
+        <attach>Patch v1.3</attach>
+        <attach>Patch v1.4 Addressed review issues.</attach>
+        <attach>Screenshot of the "New Mail" alert in Classic.</attach>
+        <attach>FreeBSD screenshot</attach>
+        <attach>Unix patch against SM 2.15</attach>
+        <attach>Screenshot of the "New Mail" alert in Modern.</attach>
+        <attach>Patch v1.5 fix remaining nits. Carrying forward r=Neil</attach>
+        <attach>Screenshot of the "New Mail" alert in Modern after removing redundant styles.</attach>
+        <attach>Screenshot of the "New Mail" alert in Classic after removing redundant styles.</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404663</id>
+      <title>aliases should be reserved for people w/ editbugs</title>
+      <description>newbies tend to try to file bugs with aliases with things like their name. it's really annoying and pointless. setting an alias should be reserved for people who are heavy users of bugzilla (editbugs).</description>
+      <attachments>
+        <attach>bug404663-v2.patch</attach>
+        <attach>bug404663-v3.patch</attach>
+        <attach>bug404663-v4.patch</attach>
+        <attach>bug404663-v5.patch</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404768</id>
+      <title>make nightly builds create partial .mar</title>
+      <description>Created attachment 289659 [details] [diff] [review] my idea of teaching tinderbox to create partial .mar after moving from aus2.mozilla.org to aus2-community.mozilla.org this previous mechanism to create partial .mar for nightly build is no longer available. this job can be done by the tinderbox clients. the attached patch implements this.</description>
+      <attachments>
+        <attach>next iteration of that patch</attach>
+        <attach>updated to trunk; minor fixes for edge cases</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404775</id>
+      <title>Preference/about:config item to reverse mousewheel direction for page zoom</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b1) Gecko/2007110904 Firefox/3.0b1 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b1) Gecko/2007110904 Firefox/3.0b1 Past versions of Firefox allowed me to zoom the text of a page with holding down CTRL and turning the wheel down. With the new page zoom feature this is reversed. CTRL and wheel down zoom out of the page (makes everything smaller) when I expect it to zoom into the page (make everything bigger). Reproducible: Always</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>404900</id>
+      <title>Add Accept/Decline to Calendar item's context menu</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9 Build Identifier: TB 2.0.0.9 and Lightning .7 and .8pre Ability to right click on a meeting and choose accept/decline as well as the edit and delete options Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Menu Screenshot - v1</attach>
+        <attach>sample Ui for replying to recurring meetings and tasks.</attach>
+        <attach>Fix - v2</attach>
+        <attach>Menu Screenshot - v3</attach>
+        <attach>Fix - v3</attach>
+        <attach>Fix - v4</attach>
+        <attach>Additional patch for task context menu</attach>
+        <attach>Additional patch for task context/today pane</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>404935</id>
+      <title>Simplifying js_CompileScript/js_CompileFunctionBody invocations</title>
+      <description>Currently in all cases js_CompileScript and js_CompileFunctionBody are used like in the following patterns: if (!js_InitParseContext(cx, &amp;pc, NULL, 0, file, filename, 1)) return NULL; js_InitCompilePrincipals(cx, &amp;pc, principals); script = js_CompileScript(cx, obj, &amp;pc); js_FinishParseContext(cx, &amp;pc); and ok = js_InitParseContext(cx, &amp;pc, chars, length, NULL, filename, lineno); if (ok) { js_InitCompilePrincipals(cx, &amp;pc, principals); ok = js_CompileFunctionBody(cx, &amp;pc, fun); js_FinishParseContext(cx, &amp;pc); } For simpler code it would be nice to move the initialization/finishing of the parse context into js_CompileScript and js_CompileFunctionBody themselves.</description>
+      <attachments>
+        <attach>v2</attach>
+        <attach>v3</attach>
+        <attach>v4</attach>
+        <attach>v5</attach>
+        <attach>v5b</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405133</id>
+      <title>Implement UI for full page zoom (SeaMonkey part)</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de-AT; rv:1.8.1.9) Gecko/20071030 SeaMonkey/1.1.6 Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; de-AT; rv:1.8.1.9) Gecko/20071030 SeaMonkey/1.1.6 Filing this as per bug 389628 comment 18 and discussion in mozilla.dev.apps.seamonkey. Options of implementing this include, but are not limited to: a) simple pref b) pref + UI i) option in Preferences ii) switch entry in Zoom menu to toggle full page / text zoom iii) two Zoom menus, one for full page and one for text zoom. Reproducible: Always</description>
+      <attachments>
+        <attach>Part 1 - implement pref</attach>
+        <attach>Addressed review comments</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405155</id>
+      <title>add support for TLS-SRP, rfc5054</title>
+      <description>User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b1) Gecko/2007110903 Firefox/3.0b1 Build Identifier: Attached patches enhance NSS with SRP authentication in TLS. A very basic softtoken has been added, so that PK11_PubDerive() and PK11_GenerateKeyPair() can be used. I've tried to break the algorithm in to pieces that match the usual procedures, i.e. create pubkey/prvkey get the peers pubkey and derive a common secret. I've considered that real tokens, storing long-term secrets v at the server or P and the client, could be in use may or may not actually know the secret. So the interfaces are such that the application is always asked for the parameters, which may then be overridden by real tokens in the GenerateKeyPair-steps. In case some parameters are not provided, no error is reported until entering the softoken code. Contrary to suggestions on nss-dev, IMO the key derivation must not be broken down further, using other token/softtoken, as this would allow attacks on (hypothetical) real SRP tokens. The GenerateKeyPair() for the client happens to be a simple ephermal DH key pair with a different secret key bitlength. For consistency, I nevertheless created a function in freebl/srp.c. srp.h contains the group parameters from the rfc in base64, as well as a few other constants. Its exported and used in the applications as well. A new app cmd/srputil is introduced to manage the verifier file (think: pw-hashes at the server). cmd/tstclient and cmd/SSLSample/server have been modified to provide login information(username/pass resp. verifier-data) to SSL. There is a non-interactive SSL_SetUserLogin function and an interactive callback to set the password after the server key exchange is received. This way, the UI could ask the users password only after certificate was validated and displayed. It's unfortunate that the server app needs to know the srp group parameters to supply them along with the verifier to the server SSL code. This should maybe be changed to optionally supply only a groupid that SSL looks up in srp.h itself. The patch works with bypass and PK11-paths, all group sizes specified in the rfc, optional rsa or dsa server certificates. It works against the old patched openssl library and, by changing the tls ids, with gnutls 2.1.6. And of course nss itself. I tell all this of course so that (hopefully small) issues I'm not aware of can be brought forward without reading all the code. Oh, maybe someone also knows why dsa certifcates are indexed with kt_null. How do you use it? create a verifier file: srputil -a -u user1 -p mypass -s vfile start a server: server -p 4433 -s vfile -d certs -n rsa_server start a client: tstclnt -o -3 -2 -c :c01b -h 127.0.0.1 -p 4433 -d certs -l user1 -k mypass Both programs accept -B for bypass-mode. Reproducible: Always</description>
+      <attachments>
+        <attach>patches SSLSample, tstclnt, adds srputil</attach>
+        <attach>V2 patches ssl, pk11wrap, freebl, softoken</attach>
+        <attach>updated to current; plus tests, standard SRP passwd file, selfserv</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405276</id>
+      <title>History sidebar should show stars and tags</title>
+      <description>User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b1) Gecko/2007110903 Firefox/3.0b1 Build Identifier: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9b1) Gecko/2007110903 Firefox/3.0b1 The history sidebar currently does not indicate starred pages. I think this would be helpful, since starring too many pages without actually adding them as bookmarks causes older ones to be bumped off the places menu. Also, maybe the history could have a view option to only view starred items. Reproducible: Always</description>
+      <attachments>
+        <attach>Show star in the history sidebar</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405358</id>
+      <title>Add QuickLook to download manager</title>
+      <description>More and more I find myself pushing |space| in the download manager to invoke QuickLook. The problem is... we don't support that. ;) Filing as UNCO to get some comments before confirming this RFE.</description>
+      <attachments>
+        <attach>QuickLook v1</attach>
+        <attach>QuickLook v3</attach>
+        <attach>QuickLook v4</attach>
+        <attach>QuickLook v4a</attach>
+        <attach>QuickLook v5</attach>
+        <attach>QL on a missing file</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405508</id>
+      <title>Task Mode: Full Task Window for Sunbird</title>
+      <description>Please add a full task window to Sunbird like bug 253396 did for Lightning.</description>
+      <attachments>
+        <attach>task mode idea2</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405794</id>
+      <title>Selected item(s) in dropdown list should be rendered natively</title>
+      <description>User-Agent: Mozilla/5.0 (X11; U; Linux i686; pl; rv:1.8.1.9) Gecko/20071105 Epiphany/2.20 Firefox/2.0.0.9 Build Identifier: Mozilla/5.0 (X11; U; Linux i686; pl; rv:1.8.1.9) Gecko/20071105 Epiphany/2.20 Firefox/2.0.0.9 autocomplete's elements shall be native menu or addressbar should be combobox with edit (there's such a component in gtk). Reproducible: Always Steps to Reproduce: 1. write in addressbar. 2. look at autocomplete's elements. Actual Results: plain (strange) looking elements. Expected Results: native menu-like elements. attachment: http://img.wklej.org/images/57616zrzutekranu.png</description>
+      <attachments>
+        <attach>current firefox' autocomplete</attach>
+        <attach>nice example of native gtk widget</attach>
+        <attach>example of same ugly situation in native gtk (that widget should die)</attach>
+        <attach>same ugly situation in gnome's run dialog</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405884</id>
+      <title>List date/time of download for each download shown</title>
+      <description>[actually nominating for wanted] As shown in this mockup (attached to bug 397655) : https://bugzilla.mozilla.org/attachment.cgi?id=288692 Showing the date/time of completion for each download will help users who know roughly when they downloaded the sought-after file by letting them scan down the list and narrow their visual searches. At the moment, in Minefield, this information is currently hidden behind an (i) button.</description>
+      <attachments>
+        <attach>v1</attach>
+        <attach>screenshot of v1.1</attach>
+        <attach>v1.1</attach>
+        <attach>v2</attach>
+        <attach>screenshot of v2</attach>
+        <attach>screenshot of v2 + no date crop</attach>
+        <attach>v2.1</attach>
+        <attach>screenshot of v2.1</attach>
+        <attach>v2.2</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405886</id>
+      <title>Remove the "Open File" button at the right of every download row</title>
+      <description>[actually nominating for wanted] As shown in this mockup (attached to bug 397655) : https://bugzilla.mozilla.org/attachment.cgi?id=288692 Given that a user can open a downloaded file in the DM by double-clicking on the row, and, failing that by right-clicking on the row and selecting "Open," the value of having a button here is outweighed by the simplicity we can achieve by removing it.</description>
+      <attachments>
+        <attach>v1</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405888</id>
+      <title>Remove the "Information" button at the right of every download row</title>
+      <description>[actually nominating for wanted] As shown in this mockup (attached to bug 397655) : https://bugzilla.mozilla.org/attachment.cgi?id=288692 As of bug 405884 (show date and time for each download), all of the user tasks associated with information behind the information button are supported even without the button. See below for the reasoning. Given that fact, the value of having a button here is outweighed by the simplicity we can achieve by removing it. Rationale: No need for the source URL: The two user-tasks associated with seeing the source information are (a) going there and (b) using some part of that information to tell you what the download is. In the first case, we've supported that by making "Go to Source Location" (and copy for good measure) available in the right-click menu, which is a shorter path than viewing, copying, opening a tab, and pasting. In the latter (b), we made this simpler by listing the TLD inline with each download. No need for the local location: The tasks are (a) getting to the download to launch it, and (b) to see where you put it. Double-clicking the row (or, for discoverability, right-clicking) launches the download, so that's (a) covered. As for (b), "Open Containing Folder"/"Show in Finder" is in the right-click menu. No need for the date/time: As of bug 405884, the date/time is put in a location that's better suited to its use in helping users find the downloads that they're looking for. In other words, we've supported the user tasks (in fact, made them quicker!) while streamlining the UI.</description>
+      <attachments>
+        <attach>v1</attach>
+        <attach>v1.1</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405892</id>
+      <title>Finish polish of the search field</title>
+      <description>[actually nominating for wanted] As shown in this mockup (attached to bug 397655) : https://bugzilla.mozilla.org/attachment.cgi?id=288692 We should add the magnifying glass icon (appropriate per platform) that we use in all search fields in Firefox.</description>
+      <attachments>
+        <attach>patch, including pinstripe cleanup</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405893</id>
+      <title>Search should match TLDs as well as download file names</title>
+      <description>[actually nominating for wanted] Now that we're showing the (very useful!) TLD for each download, it would be great if the DM's search would match against them. That way if a user needs to find something, and she remembers is where she got it, the search is of use to her.</description>
+      <attachments>
+        <attach>screenshot of v1</attach>
+        <attach>screenshot of v2 (reso)</attach>
+        <attach>screenshot of v2 (local)</attach>
+        <attach>v2</attach>
+        <attach>v2.1</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>405992</id>
+      <title>Implement native atomic operations for Linux/ARM.</title>
+      <description>User-Agent: Opera/9.24 (X11; Linux i686; U; en) Build Identifier: NSPR_HEAD_20071016 Native atomic operations for Linux/ARM should be implemented to increase performance. Reproducible: Always Steps to Reproduce: 1. Download sources. 2. Notice missing code.</description>
+      <attachments>
+        <attach>Patch v2</attach>
+        <attach>Ilpo's patch as a cvs diff, to aid review with bugzilla diffs</attach>
+        <attach>updated patch with review comments</attach>
+        <attach>updated patch with review comments (as checked in)</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406026</id>
+      <title>Consider allowing the blocklist url to direct to a particular point in the blocklist</title>
+      <description>The blocklist page is likely to get long as we blocklist more and more. It would be helpful to be able to link to a particular section of the page or even a unique page for each extension/plugin that has been plocklisted.</description>
+      <attachments>
+        <attach>WIP patch</attach>
+        <attach>WIP patch</attach>
+        <attach>Pproposed Patch</attach>
+        <attach>Pproposed Patch</attach>
+        <attach>Final Patch</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406492</id>
+      <title>Accept title and text as arguments while creating permission manager dialog</title>
+      <description>Created attachment 291143 [details] [diff] [review] Proposed patch The strings for title and introduction text for the permission manager dialogs are always taken from mozilla/suite/common/permissions/permissionsManager.properties While it's convenient for creating the default kinds of dialogs (install, popup, image), it requires non trivial work to create new permission manager dialogs (for extensions, for instance). Firefox already uses parameters for such dialogs. As install (extensions), popup, image and also cookies use that dialog without requiring parameters and for some internal uses (ones where you can edit permissionsManager.properties and bother localizers) it's convenient for them to be optional, it's better to leave it as an optional parameter instead of requiring it as in FX. I'm not making any other check than SM has today. It is, it won't work today if you use another type than popup, image or install and it won't work if you specify such type without providing title and text. I'd prefered to stick with the same argument names as FX, because it allows clients to use our API without modification (and the use for the arguments is fairly the same).</description>
+      <attachments>
+        <attach>Adressing Ratty comments</attach>
+        <attach>Adressing last comments</attach>
+        <attach>Checking for type and making "unknown" the default</attach>
+        <attach>Adressing last comments</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406778</id>
+      <title>Modern Navigator (large/small) button icon graphics need to be converted to a .PNG and the background made alpha transparent</title>
+      <description>Created attachment 291434 [details] suite/themes/modern/navigator/icons/btn1.gif See Bug 394288 Comment #13. When customizable toolbars is enabled in Navigator, the graphics for the modern navigation buttons look out of place mostly because they use a hard-coded gradient as the background. Currently I am using a variant from the modern aluminium theme but I think we might need to check the copyrights and licensing on this if the SeaMonkey council agrees to check this in. Alternatively someone with more graphic skills than I do can proceed to convert the existing modern btn1.gif into a .png with an alpha transparent background. I /think/ there is a subtle drop shadow in this that isn't in the modern aluminium theme.</description>
+      <attachments>
+        <attach>try 1: transparent, missing highlight</attach>
+        <attach>try 2: transparent, including highlight</attach>
+        <attach>Enhanced image difference error</attach>
+        <attach>Pixels that exist but aren't displayed</attach>
+        <attach>Screenshot of KaiRo's btn1.png in action</attach>
+        <attach>try 2: transparent, highlight, add home</attach>
+        <attach>patch: packaging/CSS changes</attach>
+        <attach>mozilla/suite/themes/modern/communicator/icons/common.png</attach>
+        <attach>mozilla/suite/themes/modern/communicator/icons/common-small.png</attach>
+        <attach>mozilla/suite/themes/modern/navigator/icons/browser.png</attach>
+        <attach>mozilla/suite/themes/modern/navigator/icons/browser-small.png</attach>
+        <attach>mozilla/suite/themes/modern/navigator/icons/windowcontrols.png</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406780</id>
+      <title>In OSX The customizeToolbars window should be in a &lt;panel&gt; popup.</title>
+      <description>https://bugzilla.mozilla.org/show_bug.cgi?id=394288#c40 [quote] Using the dialog has 2 issues: 1) Mac users would expect the whole, original, menubar to stay unaffected when the customizetoolbar window opens. This will require that your new window has a menubar - the widget code takes the menubar from the frontmost window and puts it at the top of the desktop. This is probably one of the reasons why toolkit has that iframe-hack on mac. 2) Once you click on the toolbar, the dialog vanishes behind the navigator window. While 1) is something we could live with (we have the same issue in lots of other dialogs), this problem is a bit worse since you can only drag stuff from the dialog to the toolbar. Thinking of it, this might be the main reason why it's done different on mac. [/quote] See Bug 250129 and Bug 350282 For the Firefox equivalent and Bug 394873 for the Thunderbird equivalent.</description>
+      <attachments>
+        <attach>Manual diff against the toolkit/customizeToolbar.* files.</attach>
+        <attach>Manual diff against the toolkit/customizeToolbar.* files.</attach>
+        <attach>Screenshot of panel mode in SeaMonkey Navigator</attach>
+        <attach>Patch 0.2 Nits Fixed</attach>
+        <attach>Patch 0.2 Flyspecked and Nitpicked.</attach>
+        <attach>Patch 1.0 Final [for checkin]</attach>
+        <attach>Patch 2.0 Backport fix from toolkit Bug 471508</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406794</id>
+      <title>Refresh the GlobalSign Root CA cert (will be EV)</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; InfoPath.1; .NET CLR 2.0.50727) Build Identifier: Not Applicable GlobalSign would like to refresh the current Root CA that we have within the NSS. The refreshed root is exactly the same as the current Root, with the exception of the Serial Number and the Valid to date, which has been pushed up to 2028 from 2014. The current GlobalSign Root CA is here:- http://secure.globalsign.net/cacert/Root.crt The new 'refreshed' Root is here:- http://secure.globalsign.net/cacert/Root-R1.crt A cryptographic comparison of the public keys will suffice here to highlight the new root is indeed a refreshed replacement. Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>WebTrust EV Audit - GlobalSign</attach>
+        <attach>GlobalSign information checklist (PDF format)</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406796</id>
+      <title>Enable GlobalSign Root for EV</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; InfoPath.1; .NET CLR 2.0.50727) Build Identifier: * Name of the CA certificate (1) GlobalSign Root CA (Currently in the NSS but due to be refreshed (Bug 406794) by GlobalSign Root CA. The latter expires in 2028 rather than 2014. (2) GlobalSign Root CA - R2 * Published CP/CPS. The GlobalSign CPS (Currently Version 5.6) is located in our repository http://www.globalsign.com/repository/index.htm * Published report describing how you're meeting the audit requirements of secton J of the EV guidelines. GlobalSign is currently covered by the EV WebTrust readiness audit performed by Deloitte and approved by Microsoft for inclusion within IE. This is not a public report. The next audit for EV is due in April 2008 at the same point as the WebTrust for CA Audit. The latter report is here:- https://cert.webtrust.org/SealFile?seal=637&amp;file=pdf * EV OID(s) for the CA certificate in question. 1.3.6.1.4.1.4146.1.1 Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>406810</id>
+      <title>Analyze startup time of Firefox3 (TRUNK)</title>
+      <description>User-Agent: Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.8 (like Gecko) Build Identifier: The goal is to speed up startup of FF3. I'll do an analysis of startup on linux using oprofiler. Further steps depends on obtained data. Reproducible: Always</description>
+      <attachments>
+        <attach>ff3 startup timeline</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>406968</id>
+      <title>ADD camerifirma EV root certificates</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506) Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 6.0; es-ES; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11 We are already included in the CA trusted list, and we whould like to incorporate a new root keys Could you please inform me about next steps ? Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Chambers of Commerce Root - 2008</attach>
+        <attach>Initial Information Gathering Document</attach>
+        <attach>auditor letter</attach>
+        <attach>answers to previous doc 406968-InfoGathering</attach>
+        <attach>SSL server certificate which chains to AC Camerfirma new roots</attach>
+        <attach>Intermediate CA's CRL</attach>
+        <attach>Intermediate CA certificate</attach>
+        <attach>Full Chambersign hierarchy from AC Camerfirma</attach>
+        <attach>Updated Information Gathering Document</attach>
+        <attach>Intermediate CA for AC Camerfirma OCSP Responder</attach>
+        <attach>Completed Information Gathering Document</attach>
+        <attach>Translation of CPS section 3.1.8</attach>
+        <attach>EV Audit info Chambers of Commerce Root</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>407059</id>
+      <title>read OpenType MATH table for variants and parts of stretchy characters</title>
+      <description>Microsoft have used a MATH table as an extension to OpenType in their Cambria Math font, that contains much information about typesetting mathematics. Notably it contains the information that we have stored in mathfontFONT.properties files for variants and parts of stretchy characters, but it provides glyph ids instead of character code points. Being able to read the information from the font would be much better than maintaining our own tables. The only other currently available font that I can find having variant and construction (from part) information in these tables is Asana Math. STIX seem to have no intention at this stage of including this information in their fonts. (See the response to the comment dated 19 November at http://www.stixfonts.org/feedback-glyphs.html) In the case of Cambria Math, variant and part glyphs that do not have a corresponding Unicode code point have no entries in the cmaps, so we cannot use a character code point table in its current form to access these glyphs. The best way to get detailed information on these tables is by emailing Sergey Malkin. Implementations for accessing these tables exist in fontforge (http://fontforge.sourceforge.net/math.html) and XeTeX.</description>
+      <attachments>
+        <attach>Patch to disable the scaling correction</attach>
+        <attach>Patch V2</attach>
+        <attach>Patch V3</attach>
+        <attach>screenshot Asana</attach>
+        <attach>screenshot Gyre Pagella</attach>
+        <attach>screenshot Asana (XeTeX)</attach>
+        <attach>screenshot Gyre Pagella (XeTeX)</attach>
+        <attach>Patch V4</attach>
+        <attach>subscript-placement.png</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table.</attach>
+        <attach>Part 2: add a gfxFont interface to the MATH table.</attach>
+        <attach>Part 3: make nsMathMLChar use the MATH table</attach>
+        <attach>Part 4: remove mathfontAsanaMath.properties and STIX 1.0 beta ; add Latin Modern to the default fonts of nsMathMLChar</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table.</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table</attach>
+        <attach>Part 3: remove mathfontAsanaMath.properties and STIX 1.0 beta ; add Latin Modern to the default fonts of nsMathMLChar</attach>
+        <attach>Part 3: remove mathfontAsanaMath.properties and STIX 1.0 beta ; add Latin Modern to the default fonts of nsMathMLChar</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table</attach>
+        <attach>Part 4 - tests</attach>
+        <attach>Part 4 - tests</attach>
+        <attach>Part 4 - tests</attach>
+        <attach>Part 5 - OTS support</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table</attach>
+        <attach>Part 5 - OTS support</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table. r=jfkthame, b=407059</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table. r=jfkthame, b=407059</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table. r=karl, b=407059</attach>
+        <attach>Part 3: remove mathfontAsanaMath.properties and STIX 1.0 beta ; add Latin Modern to the default fonts of nsMathMLChar. r=karl, b=407059</attach>
+        <attach>Part 4: reftest. r=karl, b=407059</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table. r=jfkthame, b=407059</attach>
+        <attach>Part 5: reftest. r=karl, b=407059</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table.</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table.</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table.</attach>
+        <attach>407059-4.diff</attach>
+        <attach>407059-4.diff</attach>
+        <attach>Part 4: Use gfxHarfbuzzShaper::GetGlyphHAdvance() for math operators</attach>
+        <attach>Part 4: Use gfxHarfbuzzShaper::GetGlyphHAdvance() for math operators</attach>
+        <attach>Part 4: Use gfxHarfbuzzShaper::GetGlyphHAdvance() for math operators</attach>
+        <attach>Part 4: Use gfxHarfbuzzShaper::GetGlyphHAdvance() for math operators</attach>
+        <attach>Part 3: remove mathfontAsanaMath.properties and STIX 1.0 beta. r=karl, b=407059</attach>
+        <attach>Part 3: remove mathfontAsanaMath.properties and STIX 1.0 beta.</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table.</attach>
+        <attach>minHeight</attach>
+        <attach>Part 5: reftest</attach>
+        <attach>Part 5: reftest</attach>
+        <attach>Part 4: Use gfxHarfbuzzShaper::GetGlyphHAdvance() for math operators</attach>
+        <attach>Part 1: add a gfxMathTable class to read the MATH table.</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table.</attach>
+        <attach>Part 3: remove mathfontAsanaMath.properties and STIX 1.0 beta</attach>
+        <attach>Part 4: Use gfxHarfbuzzShaper::GetGlyphHAdvance() for math operators</attach>
+        <attach>Part 5: reftest</attach>
+        <attach>Part 6: Refactor the minHeight verification to prevent an ASSERT on Windows.</attach>
+        <attach>Part 2: make nsMathMLChar use the MATH table.</attach>
+        <attach>Part 0: Remove the Truncate() calls from nsMathMLChar::StretchEnumContext</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>407163</id>
+      <title>Add thawte EV CA Root certificate to root store</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) Build Identifier: Please accept this thawte EV root certificate for inclusion in Firefox: -----BEGIN CERTIFICATE----- MIIFCjCCA/KgAwIBAgIQexFV63iakIW1jJL/Qrf+VjANBgkqhkiG9w0BAQUFADCB qTELMAkGA1UEBhMCVVMxFTATBgNVBAoTDHRoYXd0ZSwgSW5jLjEoMCYGA1UECxMf Q2VydGlmaWNhdGlvbiBTZXJ2aWNlcyBEaXZpc2lvbjE4MDYGA1UECxMvKGMpIDIw MDYgdGhhd3RlLCBJbmMuIC0gRm9yIGF1dGhvcml6ZWQgdXNlIG9ubHkxHzAdBgNV BAMTFnRoYXd0ZSBQcmltYXJ5IFJvb3QgQ0EwHhcNMDYxMTE3MDAwMDAwWhcNMTYx MTE2MjM1OTU5WjCBizELMAkGA1UEBhMCVVMxFTATBgNVBAoTDHRoYXd0ZSwgSW5j LjE5MDcGA1UECxMwVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnRoYXd0ZS5j b20vY3BzIChjKTA2MSowKAYDVQQDEyF0aGF3dGUgRXh0ZW5kZWQgVmFsaWRhdGlv biBTU0wgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC1jUf3sEh2 m737qcu/BDGiPZp+MCnTKLj+aM7P6TBqU5UOUGWAJsmYv/IU/wZ8anvcUAfimPrf zzBdyqi5ipstLX5Zixr3s8nDaYAPiRkId7JSVa14g51ruYfkUyQ3LPwZDot5FE2+ gJ60m3N0MfI47IqvKjaOZM4xJhQDVFOO+4QIwX5HMj1x4Lq6jIJYlk1oQ1Ya80Za MpmVsGBv6UGKSMwWDURosYrd3Rc9pJt4fy4pBvDc1dITP8A2Bf3HtbmAG4pGdC/x q3mel274pRNa8/y118iWGTfuBrzGJxSBBRQzOBafS+IP2zi78wHvNS7er/Hkb2/3 lgBWXo9glB0vAgMBAAGjggFIMIIBRDA7BggrBgEFBQcBAQQvMC0wKwYIKwYBBQUH MAGGH2h0dHA6Ly9FVlNlY3VyZS1vY3NwLnRoYXd0ZS5jb20wEgYDVR0TAQH/BAgw BgEB/wIBADA7BgNVHSAENDAyMDAGBFUdIAAwKDAmBggrBgEFBQcCARYaaHR0cHM6 Ly93d3cudGhhd3RlLmNvbS9jcHMwNAYDVR0fBC0wKzApoCegJYYjaHR0cDovL2Ny bC50aGF3dGUuY29tL1RoYXd0ZVBDQS5jcmwwDgYDVR0PAQH/BAQDAgEGMC4GA1Ud EQQnMCWkIzAhMR8wHQYDVQQDExZQcml2YXRlTGFiZWwzLTIwNDgtMjM0MB0GA1Ud DgQWBBTNMuLyXSVHAqqPeUsy7gOZ/TBJ0TAfBgNVHSMEGDAWgBR7W0XPr87Lev0x khpqtvNG61dIUDANBgkqhkiG9w0BAQUFAAOCAQEAC7SWzgMM0Z2vy+M5Vg3GIqDJ cX3qZZUx8dy2HvKNMV1hs1SEE8wrPwJcxx8VAYKQHjElBuMyDIfww76axABB9saR 5Ww+kl2j5D0fMi0xHlDBAiG0I+MHdZpSRVH60x39AW9gbSXZv0Oxp0NsrYy7vPeZ QevWlc8gXH5vxCraS00bW8KfsJTUv0eX/Z1JeWCOrpYZobDr6N9CxyJ0YQwlo3+P RdJ+50puHU9Iu8LaGn5KWYH6HOP7FHNBA6F3+psG/HwzvUY9DAYXhXsqe+M26IPf +qrLMgx5qoZ0bERU9tgHns2Y9CMFCS+iU7XbCoHMXyPLeRHFEVuFaycBifMOuw== -----END CERTIFICATE----- This CA is currently used to sign certificates for SSL-enabled servers, and may in the future be used to sign certificates for digitally-signed executable code objects. The CPS is at http://www.thawte.com/cps/index.html Attestation of our conformance to the stated verification requirements can be found here: http://www.thawte.com/repository/index.html (Click on the "AICPA/CICA WebTrust for Certification Authorities Audit Report" link) Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>thawte Primary Root CA certificate</attach>
+        <attach>thawte Primary Root CA</attach>
+        <attach>Here is the thawte Primary CA as an attachment</attach>
+        <attach>thawte Primary Root CA certificate</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>407168</id>
+      <title>Add GeoTrust EV Root CA to Root Store</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) Build Identifier: Please accept this GeoTrust EV root certificate for inclusion in Firefox: -----BEGIN CERTIFICATE----- MIIDfDCCAmSgAwIBAgIQGKy1av1pthU6Y2yv2vrEoTANBgkqhkiG9w0BAQUFADBY MQswCQYDVQQGEwJVUzEWMBQGA1UEChMNR2VvVHJ1c3QgSW5jLjExMC8GA1UEAxMo R2VvVHJ1c3QgUHJpbWFyeSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTAeFw0wNjEx MjcwMDAwMDBaFw0zNjA3MTYyMzU5NTlaMFgxCzAJBgNVBAYTAlVTMRYwFAYDVQQK Ew1HZW9UcnVzdCBJbmMuMTEwLwYDVQQDEyhHZW9UcnVzdCBQcmltYXJ5IENlcnRp ZmljYXRpb24gQXV0aG9yaXR5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC AQEAvrgVe//UfH1nrYNke8hCUy3f9oQIIGHWAVlqnEQRr+92/ZV+zmEwu3qDXwK9 AWbK7hWNb6EwnL2hhZ6UOvNWiAAxz9juapYC2e0DjPt1befquFUWBRaa9OBesYjA ZIVcFU2Ix7e64HXprQU9nceJSOC7KMgD4TCTZF5SwFlwIjVXiIrxlQqD17wxcwE0 7e9GceBrAqg1cmuXm2bgyxx5X9gaBGgeRwLmnWDiNpcB3841kt++Z8dtd1k7j53W kBWUvEI0EME5+bEnPn7WinXFsq+W06Lem+SYvn3h6YGttm/81w7a4DSwDRp35+MI mO9Y+pyEtzavwt+s0vQQBnBxNQIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MA4G A1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQULNVQQZcVi/CPNmFbSvtr2ZnJM5IwDQYJ KoZIhvcNAQEFBQADggEBAFpwfyzdtzRP9YZRqSa+S7iq8XEN3GHHoOo0Hnp3DwQ1 6CePbJC/kRYkRj5KTs4rFtULUh38H2eiAkUxT87z+gOneZ1TatnaYzr4gNfTmeGl 4b7UVXGYNTq+k+qurUKykG/g/CFNNWMziUnWm07Kx+dOCQD32sfvmWKZd7aVIl6K oKv0uHiYyjgZmclynnjNS6yvGaBzEi38wkG6gZHaFloxt/m0cYASSJlyc1pZU8Fj UjPtp8nSOQJw+uCxQmYpqptR7TBUIhRf2asdweSU8Pj1K/fqynhG1riR/aYNKxoU AT6A8EKglQdebc3MS6RFjasS6LPeWuWgfOgPIh1a6Vk= -----END CERTIFICATE----- This CA is currently used to sign certificates for SSL-enabled servers, and may in the future be used to sign certificates for digitally-signed executable code objects. The CPS is at http://www.geotrust.com/resources/repository/legal.aspdf Attestation of our conformance to the stated verification requirements can be found here: https://cert.webtrust.org/ViewSeal?id=650 Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>WebTrust Audit and EV Audit documentation</attach>
+        <attach>WebTrust Audit and EV Audit documentation</attach>
+        <attach>GeoTrust Primary CA certificate</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>407219</id>
+      <title>When upgrading Bugzilla using the latest cvs version it fails: Can't create table './bugsandbox/#sql-709_155d9.frm'</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11 Build Identifier: HEAD Reading table information for completion of table and column names You can turn off this feature to get a quicker startup with -A Welcome to the MySQL monitor. Commands end with ; or \g. Your MySQL connection id is 87513 to server version: 5.0.22-log Type 'help;' or '\h' for help. Type '\c' to clear the buffer. mysql&gt; use bugsandbox; Database changed mysql&gt; ALTER TABLE namedqueries_link_in_footer ADD -&gt; CONSTRAINT fk_namedqueries_link_in_footer_namedquery_id_namedqueries_id FOREIGN KEY (namedquery_id) -&gt; REFERENCES namedqueries(id) -&gt; ON UPDATE CASCADE ON DELETE CASCADE; ERROR 1005 (HY000): Can't create table './bugsandbox/#sql-709_155d9.frm' (errno: 150) Reproducible: Always Steps to Reproduce: 1. run checksetup.pl using the latest CVS version 2. 3. Actual Results: SQL Statement fails Expected Results: Bugzilla is updated</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>407439</id>
+      <title>Support for Asana Math font in MathML</title>
+      <description>Asana Math is available under the LaTeX Project Public License and "includes almost all mathematical Unicode symbols". http://tug.ctan.org/pkg/asana-math Currently there is a more recent version here: http://openfontlibrary.org/media/files/asyropoulos/213 It also includes variants sizes and parts for large character construction similar to Cambria Math and include a MATH OpenType table. A notable advantage over Cambria Math (as well as the licence) as that Asana Math provides Unicode Mappings for these variants and parts in the Supplementary Private Use Area-B (plane 16). This means that we can use a mathfontAsanaMath.properties file to specify the glyphs (characters), but we need to add support to nsMathMLChar for non-BMP code points. The appropriate characters for the properties file can be obtained by viewing the MATH table variant and construction entries in fontforge and finding the PUA code points for those glyph ids. Bug 289938 needs to be fixed for Unicode Plane 1 characters. This font has no italic nor bold style for alphanumeric characters in plane 0 as they exist at their unique code points in plane 1. To ensure that &lt;mi&gt;a&lt;/mi&gt; is displayed as italic we either need to complete the mathvariant translation to plane 1 (bug 114365) or we need to ensure that synthetic italic and bold are functional (e.g. bug 333126). I've marked severity as enhancement, but it would be nice to get this into 1.9 as we no longer support the TeX Computer Modern fonts, and this font could be a good replacement.</description>
+      <attachments>
+        <attach>Support for Asana Math</attach>
+        <attach>Add Asana in preferences</attach>
+        <attach>Support for non-BMP stretchy operators (V2)</attach>
+        <attach>Support for non-BMP stretchy operators (V3)</attach>
+        <attach>Support for Asana Math (V2)</attach>
+        <attach>Add Asana in preferences (V2)</attach>
+        <attach>support drawing non-BMP characters for stretchy operators (V4)</attach>
+        <attach>testcase</attach>
+        <attach>Add Asana in preferences (V3)</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>407752</id>
+      <title>Use gettext for localization</title>
+      <description>I could have sworn I filed this already, but maybe we just talked about it on IRC once. I've found out how to use gettext along with Template Toolkit. If we implement this, localizers won't have to localize the whole template, just the actual strings in the template. You can see this module for example code: http://search.cpan.org/dist/Catalyst-Plugin-I18N/</description>
+      <attachments/>
+    </issue>
+    <issue>
+      <id>407983</id>
+      <title>Add support clipboardData object for the onpaste, oncopy, oncut events</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b2pre) Gecko/2007121108 Minefield/3.0b2pre Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b2pre) Gecko/2007121108 Minefield/3.0b2pre There is currently no way of retrieving the clipboard data in JavaScript, WebKit and IE both have methods for this but Gecko currently lacks this functionality. WebKit uses a method of attaching the an clipboardData object to the onpaste event. This method is better since it only gives JS access to the clipboard contents when the user performs an paste action. This is how WebKit does it, contents can be retrieved from the onpaste event object: eventObj.clipboardData.getData('text/plain'); While in IE you can use, this enables to to retrieve the contents at any time: window.clipboardData.getData('Text'); IE and WebKit have only the ability to return plain text contents ideal would be to have the ability to get the rich HTML contents to be used in Midas/designMode implementations. Reproducible: Always</description>
+      <attachments>
+        <attach>work in progress</attach>
+        <attach>patch part 1 - add clipboardData to cut/copy/paste events</attach>
+        <attach>Patch part 2 - global clipboardData property</attach>
+        <attach>Patch part 3 - clipboard changed checks</attach>
+        <attach>patch part 1 - add clipboardData to cut/copy/paste events</attach>
+        <attach>patch part 2 - global clipboardData property</attach>
+        <attach>patch part 3 - clipboard changed checks</attach>
+        <attach>Part 1 - add clipboardData to cut/copy/paste events</attach>
+        <attach>Part 2 - global clipboardData property</attach>
+        <attach>Part 3 - clipboard changed checks</attach>
+        <attach>Latest patch</attach>
+        <attach>Rebased patch and address some review comments</attach>
+        <attach>Updated testcase that uses onCut and onCopy as well.</attach>
+        <attach>Updated testcase that uses onCut and onCopy as well. [bugfix]</attach>
+        <attach>Rebase v2 with already_AddRefed</attach>
+        <attach>Rebase v3</attach>
+        <attach>Disable failing test on Android</attach>
+        <attach>Right patch to disable failing test on Android</attach>
+        <attach>WIP 4 - fix nits</attach>
+        <attach>Add support for clipboardData in cut/copy/paste events</attach>
+        <attach>Add clipboard constructor</attach>
+        <attach>Part 1 - Add support for clipboardData in cut/copy/paste events</attach>
+        <attach>Part 1 - Add support for clipboardData in cut/copy/paste events</attach>
+        <attach>Part 2 - add clipboard constructor</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408008</id>
+      <title>Add FNMT Root CA cert for SSL (Spain)</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; es-ES; rv:1.9b2pre) Gecko/2007121105 Minefield/3.0b2pre Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; es-ES; rv:1.9b2pre) Gecko/2007121105 Minefield/3.0b2pre In Spain, the official SSL Certificates certifying entity is FNMT (Fabrica nacional de moneda y timbre / Coin and Stamps National manufacture). But when trying to access a web page with a certificate issued by that entity, a warning is displayed by the web browser. This will be increased in Firefox 3 as instead of displaying a warning it will show a web page with the error but nothing of the web page is displayed. I don't know whether the problem is that Mozilla does not recognize the FNMT as an SSL Certificates certifying entity or there is another problem. Anyway, no error is displayed with Internet Explorer, but surely this is not significant ;-) Reproducible: Always Steps to Reproduce: 1. Enter https://www.nic.es/ 2. Show (Código de error: sec_error_untrusted_issuer) Actual Results: https://www.nic.es/ dont show Expected Results: Mozilla reconize the FNMT SSL Certificates</description>
+      <attachments>
+        <attach>Cert details in HTML format</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408134</id>
+      <title>Source Server for Windows builds integrated into symbolstore.py</title>
+      <description>User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9b2pre) Gecko/2007120604 Minefield/3.0b2pre Build Identifier: Here is a patch for symbolstore.py to gather up and index pdb files created when a debug-info build is made. It uses pdbstr.exe which comes with the Debugging Tools for Windows and assumes that pdbstr.exe is in mozilla/toolkit/crashreporter/tools/win32 When make buildsymbols is called, this new version of symbolstore.py creates .stream files with the proper syntax for source indexed data blocks and calls on pdbstr to write it into the pdd files. On the user end, your PATH must contain cvs.exe and in your debugger (Visual Studio or Windbg) you must enable source server as well. Currently there is just one sample available to test out (an installer and a package of corresponding symbols) here: http://crashopensource.wordpress.com/2007/12/12/03-release-of-the-source-server-for-mozilla-firefox/trackback/ Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Work in progress on the patch to add source indexing</attach>
+        <attach>Current status of symbolstore.py patch</attach>
+        <attach>Replacement patch with checking for Win32</attach>
+        <attach>Symbolstore.py patch that addresses the previous comments</attach>
+        <attach>Fixed Patch - ready to check in</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408338</id>
+      <title>Thunderbird should have session restore</title>
+      <description>There's not a lot of state that gets lost when you restart Thunderbird, but there's a few things that would be nice to preserve across a restart: 1) scroll positions within mailboxes 2) "unseen" message indicators on folders (as opposed to "unread"). In current incarnations of Thunderbird this is the blue highlight on a folder. It gets lost when you restart Thunderbird, whether you actually looked at the mailbox or not. 3) which mailbox you currently had open 4) any compose windows you might have had open at the time 5) message windows that were open for reading</description>
+      <attachments>
+        <attach>Revision of first patch</attach>
+        <attach>Revision of first patch (with minor corrections to braces for getters)</attach>
+        <attach>Second revision of initial patch for session storage &amp; restoration</attach>
+        <attach>Another revision of the session storage &amp; restoration patch</attach>
+        <attach>de-bitrotted attachment 435394 "Another revision of the session storage &amp; restoration patch"</attach>
+        <attach>Minor changes to session store manager and unit tests per asuth's last review. http://hg.mozilla.org/comm-central/rev/3f17f9b73878</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408605</id>
+      <title>Preference to control cross-session download behaviour</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b3pre) Gecko/2007121605 Minefield/3.0b3pre Build Identifier: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9b3pre) Gecko/2007121605 Minefield/3.0b3pre As per bug 408555, although cross-session download resumption has been implemented, there is no way to control this behaviour, and any active/paused downloads will automatically resume next time Minefield is opened. For some users, this may pose a privacy risk. Bug 256620, comment 1 suggested one possible way of implementing this, although if the user has multiple tabs open which trigger the save tabs dialog, this may cause user fatigue. An option could also be provided in either Tools-&gt;Options-&gt;Main under downloads, or Tools-Options-&gt;Privacy, perhaps as part of the "Clear private data on exit" options. Reproducible: Always Steps to Reproduce: 1. Start downloading a file that would cause you personal or professional embarrassment if anyone else ever saw that you had downloaded it. 2. Exit and restart Firefox. 3. Download resumes. Actual Results: On restart the download resumes. Embarrassment ensues. Expected Results: The download should not resume if user wishes for unfinished downloads to cancel at end of browsing sessions.</description>
+      <attachments>
+        <attach>Patch v2 - fixes a couple of nits, better commented</attach>
+        <attach>Patch v3 - unbitrotted</attach>
+        <attach>Patch v4 - new patch for review</attach>
+        <attach>Patch v4a - new patch for review</attach>
+        <attach>Patch v5 - tri-state preference</attach>
+        <attach>Patch v6 - tri-state patch 2nd attempt</attach>
+        <attach>Patch v7 - final version for check-in</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408797</id>
+      <title>Implement Change Password as a notification bar</title>
+      <description>Created attachment 293643 [details] [diff] [review] Patch (v1) This bug covers a subset of bug 394611, which entails implementing the change password confirmation dialog as a notification bar.</description>
+      <attachments>
+        <attach>Patch (v1) (strings only)</attach>
+        <attach>Patch (v1.1) (strings only) (checked in)</attach>
+        <attach>Patch (v2)</attach>
+        <attach>Patch (v2.1)</attach>
+        <attach>Patch (v2.2)</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408807</id>
+      <title>need link to the bug at the attachment details window</title>
+      <description>Created attachment 293649 [details] [diff] [review] patch for template "edit.html.tmpl" On "attachment.cgi?id=xxxx&amp;action=edit" window, we have links to the attachments on the same bug, but not to the bug. Like,, Attachments on this Bug: xxxx, &lt;xxxx&gt; # &lt;&gt; show the link. I think i'll be happy if i can jump to the bug from here. Like,, Attachments on &lt;this Bug&gt;: xxxx, &lt;xxxx&gt;</description>
+      <attachments>
+        <attach>patch v2</attach>
+        <attach>patch v.3</attach>
+        <attach>patch v.4</attach>
+        <attach>patch v.5</attach>
+        <attach>patch</attach>
+        <attach>patch v.7</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408869</id>
+      <title>Make the extension installation dialog easier to understand</title>
+      <description>Mockup and notes: http://wiki.mozilla.org/Firefox:Add-ons_Manager_UI#Scary_Confirmation The redesign is an attempt to do the following: - remove redundant and confusing messages from the dialog - elevate the warning, rather than the list of add-ons, to primacy in the dialog. The point of the dialog, after all, is the warning -- the list of add-ons is just to give some context for the warning - make the "Signed" or "Unsigned" status, currently expressed in those terms and red lettering, something that is more user-understandable.</description>
+      <attachments>
+        <attach>current wip</attach>
+        <attach>minor layout adjustments</attach>
+        <attach>patch rev 1</attach>
+        <attach>patch rev 2</attach>
+        <attach>patch rev 3</attach>
+        <attach>patch rev 4</attach>
+        <attach>patch rev 5</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>408949</id>
+      <title>Add Hongkong Post Root Certificates</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322) Build Identifier: This is an enhancement request to include the Root Certificates of the Hongkong Post Certification Authority into Mozilla's default set of root certificates, and to enable the trust-bits for SSL verification. Reproducible: Always Steps to Reproduce: 1. 2. 3. CA Name: Hongkong Post Certification Authority Website: http://www.hongkongpost.gov.hk/index.html Hongkong Post CA is a recognized CA under the law of Hong Kong Special Administrative Region (HKSAR) of China, and has been issuing digital certificates, under the brand name "e-Cert" to individuals and organisations of HKSAR since January 2000. [https://secure1.info.gov.hk/ogcio/eng/caro/esub41.htm]. The Root certificate is called "Hongkong Post Root CA 1", which has only one direct subordinate, "Hongkong Post e-Cert CA 1". "Hongkong Post e-Cert CA 1" is the signer key and is used to issue different types of recognized e-Cert to individuals and organisations. In particular, the Hongkong Post e-Cert (Server) certificate is for SSL server certificate. Audit Type (WebTrust, ETSI etc.): WebTrust Auditor: PricewaterhouseCoopers Auditor Website: http://www.pwc.com/ Audit Document URL(s): http://cert.webtrust.org/SealFile?seal=125&amp;file=pdf Root Certificate Details ------------------------ Certificate Name: Hongkong Post Root CA 1 This root certificate has only one direct subordinate, "Hongkong Post e-Cert CA 1" Certificate HTTP URL (on CA website): http://www.hongkongpost.gov.hk/product/download/root/img/smartid_rt.cacert Version: X.509v3 SHA1 Fingerprint: D6:DA:A8:20:8D:09:D2:15:4D:24:B5:2F:CB:34:6E:B2:58:B2:8A:58 MD5 Fingerprint: A8:0D:6F:39:78:B9:43:6D:77:42:6D:98:5A:CC:23:CA Modulus Length (a.k.a. "key length"): 2048 Valid From (YYYY-MM-DD): 2003-05-15 Valid To (YYYY-MM-DD): 2023-05-15 CRL HTTP URL: N/A LDAP URL: ldap://ldap1.hongkongpost.gov.hk/cn=Hongkong Post Root CA 1,o=Hongkong Post,c=HK OCSP URL: N/A Class (domain-validated, identity-validated or EV): identity-validated and domain-validated Certificate Policy URL: http://www.hongkongpost.gov.hk/product/cps/index.html CPS URL: http://www.hongkongpost.gov.hk/product/cps/index.html Requested Trust Indicators (email and/or SSL and/or code): SSL Certificate Name: Hongkong Post e-Cert CA 1 The signer key for different types of end-entity e-Cert certificates. Certificate HTTP URL (on CA website): http://www.hongkongpost.gov.hk/product/download/root/img/smartid_ca.cacert Version: 3 SHA1 Fingerprint: 0A:51:EE:71:01:B5:35:AB:C9:F3:94:14:A9:3C:76:E7:DC:76:8C:7B MD5 Fingerprint: B1:F0:A3:09:31:09:59:51:37:98:9E:3C:C3:5C:4F:F5 Modulus Length (a.k.a. "key length"): 2048 Valid From (YYYY-MM-DD): 2003-05-15 Valid To (YYYY-MM-DD): 2013-05-15 CRL HTTP URL: http://crl1.hongkongpost.gov.hk/crl/eCertCA1CRL1.crl OCSP URL: N/A Class (domain-validated, identity-validated or EV): identity-validated and domain-validated Certificate Policy URL: http://www.hongkongpost.gov.hk/product/cps/index.html CPS URL: http://www.hongkongpost.gov.hk/product/cps/index.html Requested Trust Indicators (email and/or SSL and/or code): SSL LDAP repository: ldap://ldap1.hongkongpost.gov.hk</description>
+      <attachments>
+        <attach>a Bank-Cert (Personal) certificate from LDAP</attach>
+        <attach>Completed Information Gathering Document</attach>
+        <attach>Completed Information Gathering Document</attach>
+        <attach>Sample server certificate</attach>
+        <attach>Subordinate CA certificate for signing server certificates</attach>
+        <attach>WebtrustCA-2016.pdf</attach>
+        <attach>WebTrust-BR-2016.pdf</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>409109</id>
+      <title>Replacing JS_SetBranchCallback by JS_SetOperationCallback</title>
+      <description>JS_SetOperationCallback API introduced by bug 364776 allows to avoid the overhead of calling the branch callback on each backward jump in a script. It would be nice to switch the browser to the new API.</description>
+      <attachments>
+        <attach>v2</attach>
+        <attach>v1b</attach>
+        <attach>v2</attach>
+        <attach>v1b-v2 delta</attach>
+        <attach>v2b</attach>
+        <attach>v3</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>409235</id>
+      <title>add Verisign's G4 ECC root certificate</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) Build Identifier: Please accept the attached VeriSign root certificate for inclusion in Firefox. This CA will be used to sign certificates for SSL-enabled servers, and may in the future be used to sign certificates for digitally-signed executable code objects. Name of the CA certificate is VeriSign Class 3 Public Primary Certificate Authority - G4 Link to VeriSign's CPS - http://www.verisign.com/repository/CPS/ Link to VeriSign's CP - http://www.verisign.com/repository/vtnCp.html Attestation of our conformance to the stated verification requirements can be found here: http://www.verisign.com/repository/index.html (Click on the "AICPA/CICA WebTrust for Certification Authorities Audit Report" link) Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Letter from KPMG regarding Verisign's ECC roots</attach>
+        <attach>Root CA as .cer file</attach>
+        <attach>Initial Information Gathering Document</attach>
+        <attach>Completed Information Gathering Document</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>409236</id>
+      <title>Add GeoTrust's ECC root</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) Build Identifier: Please accept the attached GeoTrust root certificate for inclusion in Firefox. This CA will be used to sign certificates for SSL-enabled servers, and may in the future be used to sign certificates for digitally-signed executable code objects. Name of the CA certificate is GeoTrust Primary Certificate Authority - G2 Link to GeoTrust's CPS - http://www.geotrust.com/resources/repository/legal.asp Attestation of our conformance to the stated verification requirements can be found here: https://cert.webtrust.org/ViewSeal?id=650 Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Letter from KPMG regarding GeoTrust's ECC roots</attach>
+        <attach>Initial Information Gathering Document</attach>
+        <attach>Completed Information Gathering Document</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>409237</id>
+      <title>add new Thawte root CA certificate</title>
+      <description>User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) Build Identifier: Please accept the attached thawte root certificate for inclusion in Firefox. This CA will be used to sign certificates for SSL-enabled servers, and may in the future be used to sign certificates for digitally-signed executable code objects. Name of the CA certificate is thawte Primary Root - G2 The CPS is at http://www.thawte.com/cps/index.html Attestation of our conformance to the stated verification requirements can be found here: http://www.thawte.com/repository/index.html (Click on the "AICPA/CICA WebTrust for Certification Authorities Audit Report" link) Reproducible: Always Steps to Reproduce: 1. 2. 3.</description>
+      <attachments>
+        <attach>Letter from KPMG regarding thawte's ECC roots</attach>
+        <attach>Root CA as a .cer file</attach>
+        <attach>Initial Information Gathering Document</attach>
+        <attach>Completed Information Gathering Document</attach>
+        <attach>Completed Information Gathering Document</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>409279</id>
+      <title>FUEL: provide a way to perform bookmark queries</title>
+      <description>Right now the only way of finding bookmarks in FUEL is to recursively iterate folders beginning with the root. Because the assumption is that in Firefox 3 users are going to accumulate a lot of bookmarks, this could be not efficient enough (not to mention inconvenient). I talked about it a little with Mark Finkle and we agreed that it would be useful if FUEL provided an interface for querying bookmarks, as a wrapper for nsINavHistoryQuery and friends. An example of how it could look like in action: var query = bookmarks.newQuery(); query.type = "folder"; query.searchTerms = "goats"; var results = query.execute();</description>
+      <attachments>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelApplication.js</attach>
+        <attach>fuelIApplication.idl</attach>
+        <attach>browser_BookmarkQuery.js</attach>
+      </attachments>
+    </issue>
+    <issue>
+      <id>409838</id>
+      <title>add Trustwave "Secure Global CA" EV root</title>
+      <description>User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11 Build Identifier: Name of the CA certificate in question: The Trustwave "Secure Global CA" root certificate is located here: https://www.securetrust.com/legal/SGCA.txt) Published CP/CPS where we describe how we're operating in accordance with the EV guidelines: http://www.securetrust.com/legal/issuer.html includes: SecureTrust Extended Validation CPS Extended Validation SSL Relying Party Agreement Extended Validation Subcriber Agreement CRL for Secure Global CA CRL: http://crl.securetrust.com/SGCA.crl Published CPSs for other uses: https://www.securetrust.com/legal/ Current (1ssued November 2007) AICPA/CICA WebTrust for Certification Authorities Audit Report including EV audit can be found here: https://cert.webtrust.org/ViewSeal?id=359 EV OID(s) for the CA certificate in question: 2.16.840.1.114404.1.1.2.4.1 (http://www.securetrust.com/legal/issuer.html) This CA is currently/soon shall be used to issue certificates marked for: 1.3.6.1.5.5.7.3.1 - id_kp_serverAuth 1.3.6.1.5.5.7.3.2 - id_kp_clientAuth 1.3.6.1.5.5.7.3.3 - id_kp_codeSigning 1.3.6.1.5.5.7.3.4 - id_kp_emailProtection 1.3.6.1.5.5.7.3.8 - id_kp_timeStamping 1.3.6.1.5.5.7.3.9 - OCSPSigning We currently issue SMIME, EV, and OV certificates off of this root. Based upon outcome of current cabforum activity, we may also issue code signing certificates off it as well. SHA1 thumbprint: 3a 44 73 5a e5 81 90 1f 24 86 61 46 1e 3b 9c c4 5f f5 3a 1b Certificate: Data: Version: 3 (0x2) Serial Number: 07:56:22:a4:e8:d4:8a:89:4d:f4:13:c8:f0:f8:ea:a5 Signature Algorithm: sha1WithRSAEncryption Issuer: C=US, O=SecureTrust Corporation, CN=Secure Global CA Validity Not Before: Nov 7 19:42:28 2006 GMT Not After : Dec 31 19:52:06 2029 GMT Subject: C=US, O=SecureTrust Corporation, CN=Secure Global CA Subject Public Key Info: Public Key Algorithm: rsaEncryption RSA Public Key: (2048 bit) Modulus (2048 bit): 00:af:35:2e:d8:ac:6c:55:69:06:71:e5:13:68:24: b3:4f:d8:cc:21:47:f8:f1:60:38:89:89:03:e9:bd: ea:5e:46:53:09:dc:5c:f5:5a:e8:f7:45:2a:02:eb: 31:61:d7:29:33:4c:ce:c7:7c:0a:37:7e:0f:ba:32: 98:e1:1d:97:af:8f:c7:dc:c9:38:96:f3:db:1a:fc: 51:ed:68:c6:d0:6e:a4:7c:24:d1:ae:42:c8:96:50: 63:2e:e0:fe:75:fe:98:a7:5f:49:2e:95:e3:39:33: 64:8e:1e:a4:5f:90:d2:67:3c:b2:d9:fe:41:b9:55: a7:09:8e:72:05:1e:8b:dd:44:85:82:42:d0:49:c0: 1d:60:f0:d1:17:2c:95:eb:f6:a5:c1:92:a3:c5:c2: a7:08:60:0d:60:04:10:96:79:9e:16:34:e6:a9:b6: fa:25:45:39:c8:1e:65:f9:93:f5:aa:f1:52:dc:99: 98:3d:a5:86:1a:0c:35:33:fa:4b:a5:04:06:15:1c: 31:80:ef:aa:18:6b:c2:7b:d7:da:ce:f9:33:20:d5: f5:bd:6a:33:2d:81:04:fb:b0:5c:d4:9c:a3:e2:5c: 1d:e3:a9:42:75:5e:7b:d4:77:ef:39:54:ba:c9:0a: 18:1b:12:99:49:2f:88:4b:fd:50:62:d1:73:e7:8f: 7a:43 Exponent: 65537 (0x10001) X509v3 extensions: 1.3.6.1.4.1.311.20.2: ...C.A X509v3 Key Usage: Digital Signature, Certificate Sign, CRL Sign X509v3 Basic Constraints: critical CA:TRUE X509v3 Subject Key Identifier: AF:44:04:C2:41:7E:48:83:DB:4E:39:02:EC:EC:84:7A:E6:CE:C9:A4 X509v3 CRL Distribution Points: URI:http://crl.securetrust.com/SGCA.crl 1.3.6.1.4.1.311.21.1: ... Signature Algorithm: sha1WithRSAEncryption 63:1a:08:40:7d:a4:5e:53:0d:77:d8:7a:ae:1f:0d:0b:51:16: 03:ef:18:7c:c8:e3:af:6a:58:93:14:60:91:b2:84:dc:88:4e: be:39:8a:3a:f3:e6:82:89:5d:01:37:b3:ab:24:a4:15:0e:92: 35:5a:4a:44:5e:4e:57:fa:75:ce:1f:48:ce:66:f4:3c:40:26: 92:98:6c:1b:ee:24:46:0c:17:b3:52:a5:db:a5:91:91:cf:37: d3:6f:e7:27:08:3a:4e:19:1f:3a:a7:58:5c:17:cf:79:3f:8b: e4:a7:d3:26:23:9d:26:0f:58:69:fc:47:7e:b2:d0:8d:8b:93: bf:29:4f:43:69:74:76:67:4b:cf:07:8c:e6:02:f7:b5:e1:b4: 43:b5:4b:2d:14:9f:f9:dc:26:0d:bf:a6:47:74:06:d8:88:d1: 3a:29:30:84:ce:d2:39:80:62:1b:a8:c7:57:49:bc:6a:55:51: 67:15:4a:be:35:07:e4:d5:75:98:37:79:30:14:db:29:9d:6c: c5:69:cc:47:55:a2:30:f7:cc:5c:7f:c2:c3:98:1c:6b:4e:16: 80:eb:7a:78:65:45:a2:00:1a:af:0c:0d:55:64:34:48:b8:92: b9:f1:b4:50:29:f2:4f:23:1f:da:6c:ac:1f:44:e1:dd:23:78: 51:5b:c7:16 -----BEGIN CERTIFICATE----- MIIDvDCCAqSgAwIBAgIQB1YipOjUiolN9BPI8PjqpTANBgkqhkiG9w0BAQUFADBK MQswCQYDVQQGEwJVUzEgMB4GA1UEChMXU2VjdXJlVHJ1c3QgQ29ycG9yYXRpb24x GTAXBgNVBAMTEFNlY3VyZSBHbG9iYWwgQ0EwHhcNMDYxMTA3MTk0MjI4WhcNMjkx MjMxMTk1MjA2WjBKMQswCQYDVQQGEwJVUzEgMB4GA1UEChMXU2VjdXJlVHJ1c3Qg Q29ycG9yYXRpb24xGTAXBgNVBAMTEFNlY3VyZSBHbG9iYWwgQ0EwggEiMA0GCSqG SIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvNS7YrGxVaQZx5RNoJLNP2MwhR/jxYDiJ iQPpvepeRlMJ3Fz1Wuj3RSoC6zFh1ykzTM7HfAo3fg+6MpjhHZevj8fcyTiW89sa /FHtaMbQbqR8JNGuQsiWUGMu4P51/pinX0kuleM5M2SOHqRfkNJnPLLZ/kG5VacJ jnIFHovdRIWCQtBJwB1g8NEXLJXr9qXBkqPFwqcIYA1gBBCWeZ4WNOaptvolRTnI HmX5k/Wq8VLcmZg9pYYaDDUz+kulBAYVHDGA76oYa8J719rO+TMg1fW9ajMtgQT7 sFzUnKPiXB3jqUJ1XnvUd+85VLrJChgbEplJL4hL/VBi0XPnj3pDAgMBAAGjgZ0w gZowEwYJKwYBBAGCNxQCBAYeBABDAEEwCwYDVR0PBAQDAgGGMA8GA1UdEwEB/wQF MAMBAf8wHQYDVR0OBBYEFK9EBMJBfkiD2045AuzshHrmzsmkMDQGA1UdHwQtMCsw KaAnoCWGI2h0dHA6Ly9jcmwuc2VjdXJldHJ1c3QuY29tL1NHQ0EuY3JsMBAGCSsG AQQBgjcVAQQDAgEAMA0GCSqGSIb3DQEBBQUAA4IBAQBjGghAfaReUw132HquHw0L URYD7xh8yOOvaliTFGCRsoTciE6+OYo68+aCiV0BN7OrJKQVDpI1WkpEXk5X+nXO H0jOZvQ8QCaSmGwb7iRGDBezUqXbpZGRzzfTb+cnCDpOGR86p1hcF895P4vkp9Mm I50mD1hp/Ed+stCNi5O/KU9DaXR2Z0vPB4zmAve14bRDtUstFJ/53CYNv6ZHdAbY iNE6KTCEztI5gGIbqMdXSbxqVVFnFUq+NQfk1XWYN3kwFNspnWzFacxHVaIw98xc f8LDmBxrThaA63p4ZUWiABqvDA1VZDRIuJK58bRQKfJPIx/abKwfROHdI3hRW8cW -----END CERTIFICATE----- Note information on the "historical dangling" OIDS above in the extensions - 1.3.6.1.4.1.311.21.1 &amp; 1.3.6.1.4.1.311.20.2 - which currently are of no importance or relevance, to us, can be found here: http://support.microsoft.com/kb/287547. Also, these extensions are NOT CRITICAL. Reproducible: Always</description>
+      <attachments>
+        <attach>TrustwaveIntermediates.tgz</attach>
+      </attachments>
+    </issue>
+  </issues>
+</root>
