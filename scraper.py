@@ -20,8 +20,8 @@ LUCENE_URL_PREFIX = 'https://issues.apache.org/jira/browse/LUCENE-'
 
 DUPLICATED_ISSUES = ["RESOLVED DUPLICATE", "VERIFIED DUPLICATE"] # ignore duplicate issues
 
-MINIMUM_COMMENTS = 15 # minimum number of comments in an issue to be considered as an active discussion
-MINIMUM_COMMENTERS = 10 # minimum number of commenters in an issue to be considered as an active discussion
+MINIMUM_COMMENTS = 1 # minimum number of comments in an issue to be considered as an active discussion
+MINIMUM_COMMENTERS = 1 # minimum number of commenters in an issue to be considered as an active discussion
 
 firefox_attributes = {
     'status-id':'field-value-status_summary', 'title-id':'field-value-short_desc',
@@ -34,7 +34,7 @@ mylyn_attributes = {
     'status-id':'bz_field_status', 'title-id':'short_desc_nonedit_display',
     'attachment-id':'attachment_table', 'attachment-regex':'^bz_contenttype+$',
     'comment-regex':'^c\d+$', 'reporter-id':'bz_show_bug_column_2', 'reporter-class':'vcard',
-    'commenter-class':'vcard', 'comment-text-class':'bz_comment_text'
+    'commenter-class':'fn', 'comment-text-class':'bz_comment_text'
 }
 
 lucene_attributes = {
@@ -109,7 +109,7 @@ def scrape_issue(url_prefix, _id, attributes):
         comments = soup.find_all(id=re.compile(comment_regex))
         if len(comments) > MINIMUM_COMMENTS: # the scraped issue should have a certain number of comments to be considered active
             # Count number of commenters participating in the discussion
-            commenters = count_commenters(_id, comments, ('span', {'class':'fn'}))
+            commenters = count_commenters(_id, comments, ('span', {'class':commenter_class}))
             if commenters is None:
                 return None
             
@@ -145,7 +145,7 @@ def scrape_issue(url_prefix, _id, attributes):
         return None
     
     print('[{0}] Completed!\n'.format(_id))
-    return Issue(str(_id), title, description, attachments_content)
+    return Issue(str(_id), title, description, attachments_content, len(comments), len(commenters))
 
 def scrape_lucene(url_prefix, _id, attributes):
     """Scrape LUCENE issues
@@ -205,7 +205,7 @@ def scrape_lucene(url_prefix, _id, attributes):
         return None
     
     print('[{0}] Completed!\n'.format(_id))
-    return Issue(str(_id), title, description, [])
+    return Issue(str(_id), title, description, [], len(comments), len(commenters))
 
 def scrape(system, ids):
     """Scrape a list of issues given the id range.
@@ -221,23 +221,18 @@ def scrape(system, ids):
     """
     issues = []
     system = system.upper()
-    # If user want to scrape data within a range of ids
-    if len(ids) == 2:
-        for i in range(ids[0], ids[1] + 1):
-            if system == 'FIREFOX':
-                issue = scrape_issue(url_prefix=FIREFOX_URL_PREFIX, _id=i, attributes=firefox_attributes)
-            elif system == 'MYLYN':
-                issue = scrape_issue(url_prefix=MYLYN_URL_PREFIX, _id=i, attributes=mylyn_attributes)
-            elif system == 'LUCENE':
-                issue = scrape_lucene(url_prefix=LUCENE_URL_PREFIX, _id=i, attributes=lucene_attributes)
-            else:
-                raise RuntimeError('System is unsupported: ' + system)
-            
-            if issue is not None:
-                issues.append(issue)
-    else:
-        raise RuntimeError('Please specify the ids range you want to scrape!')
-    
+    for i in ids:
+        if system == 'FIREFOX':
+            issue = scrape_issue(url_prefix=FIREFOX_URL_PREFIX, _id=i, attributes=firefox_attributes)
+        elif system == 'MYLYN':
+            issue = scrape_issue(url_prefix=MYLYN_URL_PREFIX, _id=i, attributes=mylyn_attributes)
+        elif system == 'LUCENE':
+            issue = scrape_lucene(url_prefix=LUCENE_URL_PREFIX, _id=i, attributes=lucene_attributes)
+        else:
+            raise RuntimeError('System is unsupported: ' + system)
+        
+        if issue is not None:
+            issues.append(issue)
     return issues
 
 def count_commenters(_id, comments, attributes):
@@ -267,7 +262,7 @@ def multiprocess_scrape(system, ids, num_processes):
         a list of scraped data storing in Issue objects
     """
     pool = mp.Pool(processes=num_processes)
-    results = [pool.apply_async(scrape, args=(system, id_range)) for id_range in ids]
+    results = [pool.apply_async(scrape, args=(system, range(id_range[0], id_range[1]))) for id_range in ids]
     # ensure that all processes in the pool were terminated and resources were freed
     pool.close() 
     pool.join()
@@ -297,6 +292,8 @@ def to_xml(f, system, issues):
                     ....
                     <attach>attach_description_n</attach>
                 </attachments>
+                <comments>number_of_comments</comments>
+                <commenters>number_of_commenter</commenters>
             </issue>
             .....
             <issue>
@@ -308,6 +305,8 @@ def to_xml(f, system, issues):
                     ....
                     <attach>attach_description_n</attach>
                 </attachments>
+                <comments>number_of_comments</comments>
+                <commenters>number_of_commenter</commenters>
             </issue>
         </issues>
     </root>
@@ -335,7 +334,9 @@ def to_xml(f, system, issues):
         # add attachment
         for at in issue.get_attachments():
             etree.SubElement(attachments_e, "attach").text = at
-    
+        
+        etree.SubElement(issue_e, "comments").text = str(issue.get_comments())
+        etree.SubElement(issue_e, "commenters").text = str(issue.get_commenters())
     # write to file
     tree = etree.ElementTree(element=root)
     tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
