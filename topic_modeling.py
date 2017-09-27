@@ -11,7 +11,7 @@ from lxml import etree
 import os
 
 from issue import Issue
-from scraper import multiprocess_scrape, split_range, to_xml
+from scraper import multiprocess_scrape, split_range, to_xml, scrape
 
 n_features = 1000
 # n_components = 10
@@ -45,6 +45,41 @@ def unique_list(l):
             ulist.append(item)
     return ulist
 
+def filter_issues(issues, comment_std_dev=0, commenter_std_dev=0):
+    """Filter issues with number of comments and commenters higher than average
+    
+    Parameters
+    ----------
+    issues : list of Issue
+    
+    std_dev : standard deviation
+    
+    Returns
+    -------
+    filtered_issues
+    """
+    
+    total_comments = 0;
+    total_commenters = 0;
+    for issue in issues:
+        total_comments += issue.get_comments()
+        total_commenters += issue.get_commenters()
+    
+    avg_comment = total_comments/len(issues)
+    avg_commenter = total_commenters/len(issues)
+    
+    print('Average comments: {0}'.format(avg_comment))
+    print('Average commenters: {0}'.format(avg_commenter))
+    
+    filtered_issues = []
+    
+    for issue in issues:
+        if issue.get_comments() >= (avg_comment+comment_std_dev) and issue.get_commenters() >= (avg_commenter + commenter_std_dev):
+            filtered_issues.append(issue)
+    
+    print('Get {0} issues out of {1} issues'.format(len(filtered_issues), len(issues)))
+    return filtered_issues
+
 def issues_to_corpus(issues):
     """Convert from list of issues to a corpus.
     An issue will be extracted as its title, description and attachments.
@@ -70,6 +105,38 @@ def issues_to_corpus(issues):
         corpus[_id] = content
     
     return corpus
+
+def xml_to_issues(f):
+    """Extract issue data from xml file to make an issue list
+    
+    Parameters
+    ----------
+    file : string 
+        XML file path
+    
+    Returns
+    -------
+    issues : list
+        issues list
+    """
+    parser = etree.XMLParser(ns_clean=True, remove_comments=True)
+    tree = etree.parse(f, parser)
+    root = tree.getroot()
+    
+    issues = []
+    issues_e = root.find('issues') # find all issues
+    for issue_e in issues_e:
+        attachments = []
+        _id = issue_e.find('id').text
+        title = issue_e.find('title').text
+        description = issue_e.find('description').text
+        for item in issue_e.findall('.//attachment'):
+            attachments.append(item.text)            
+        comments = issue_e.find('comments').text
+        commenters = issue_e.find('commenters').text
+        issues.append(Issue(_id, title, description, attachments, int(comments), int(commenters)))
+        
+    return issues
 
 def xml_to_corpus(f):
     """Extract issue data from xml file to make a corpus
@@ -329,19 +396,14 @@ def assign_nfr_category(topics):
         category = determine_nfr_category(topic_words)
         issue_nfr_category[issue_id] = category
         
-        print('Id %s \t\t Category: %s' % (issue_id, category))
+        print('Id {:>5} \t\t Category: {:>15}'.format(issue_id, category))
         
     return issue_nfr_category
         
 def main():
-    num_threads = 1
-    system = 'Firefox'
-    ids = split_range([500000, 510000], 1)
-    issues = multiprocess_scrape(system, ids, num_threads)
-    to_xml('firefox_issue.xml', system, issues)
-    # corpus = xml_to_corpus('mylyn_issue.xml')
+    issues = filter_issues(xml_to_issues('data/mylyn-enhancement-issues.xml'), commenter_std_dev=3)
     corpus = issues_to_corpus(issues)
-    lda_topics = topic_modeling_lda(corpus=corpus, n_topics=1, n_top_words=1)
+    lda_topics = topic_modeling_lda(corpus=corpus, n_topics=1, n_top_words=2)
     # nmf_topics = topic_modeling_nmf(corpus = corpus, n_topics = 2, n_top_words = 5)
     categories = assign_nfr_category(lda_topics)
     
