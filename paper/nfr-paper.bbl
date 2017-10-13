@@ -1,0 +1,73 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{scacchi05}
+W.~Scacchi, C.~Jensen, J.~Noll, M.~Elliott, Multi-modal modeling, analysis and
+  validation of open source software requirements processes, in: International
+  conference on Open Source Systems, Vol.~1, Genoa, Italy, 2005, pp. 49--63.
+
+\bibitem{ernst12}
+N.~A. Ernst, G.~C. Murphy, Case studies in just-in-time requirements analysis,
+  in: 2012 Second IEEE International Workshop on Empirical Requirements
+  Engineering (EmpiRE), 2012, pp. 25--32.
+\newblock \href {http://dx.doi.org/10.1109/EmpiRE.2012.6347678}
+  {\path{doi:10.1109/EmpiRE.2012.6347678}}.
+
+\bibitem{alspaugh2013ongoing}
+T.~A. Alspaugh, W.~Scacchi, Ongoing software development without classical
+  requirements, in: Requirements Engineering Conference (RE), 2013 21st IEEE
+  International, IEEE, 2013, pp. 165--174.
+
+\bibitem{scacchi02}
+W.~Scacchi, Understanding the requirements for developing open source software
+  systems, IEEE Proceedings - Software 149~(1) (2002) 24--39.
+\newblock \href {http://dx.doi.org/10.1049/ip-sen:20020202}
+  {\path{doi:10.1049/ip-sen:20020202}}.
+
+\bibitem{heck15}
+P.~Heck, A.~Zaidman, Quality criteria for just-in-time requirements: just
+  enough, just-in-time?, in: 2015 IEEE Workshop on Just-In-Time Requirements
+  Engineering (JITRE), 2015, pp. 1--4.
+\newblock \href {http://dx.doi.org/10.1109/JITRE.2015.7330170}
+  {\path{doi:10.1109/JITRE.2015.7330170}}.
+
+\bibitem{nanniu14}
+N.~Niu, T.~Bhowmik, H.~Liu, Z.~Niu, Traceability-enabled refactoring for
+  managing just-in-time requirements, in: 2014 IEEE 22nd International
+  Requirements Engineering Conference (RE), 2014, pp. 133--142.
+\newblock \href {http://dx.doi.org/10.1109/RE.2014.6912255}
+  {\path{doi:10.1109/RE.2014.6912255}}.
+
+\bibitem{mlee}
+M.~Lee, Just-in-time requirements analysis-the engine that drives the planning
+  game, Agile Alliance, 2002, pp. 25--32.
+
+\bibitem{bhowmik15}
+T.~Bhowmik, S.~Reddivari, Resolution trend of just-in-time requirements in open
+  source software development, in: 2015 IEEE Workshop on Just-In-Time
+  Requirements Engineering (JITRE), 2015, pp. 17--20.
+\newblock \href {http://dx.doi.org/10.1109/JITRE.2015.7330214}
+  {\path{doi:10.1109/JITRE.2015.7330214}}.
+
+\bibitem{Cysneiros2004}
+L.~M. Cysneiros, E.~Yu, Non-Functional Requirements Elicitation, Springer US,
+  Boston, MA, 2004, pp. 115--138.
+
+\bibitem{Boehm1976}
+B.~W. Boehm, J.~R. Brown, M.~Lipow, Quantitative evaluation of software
+  quality, in: Proceedings of the 2nd International Conference on Software
+  Engineering, IEEE Computer Society Press, 1976, pp. 592--605.
+
+\bibitem{taiichi}
+T.~Ohno, Toyota production system: beyond large-scale production, Productivity
+  Press, 1988.
+
+\bibitem{patton}
+M.~Q. Patton, Qualitative Research and Evaluation Methods, SAGE Publications,
+  2001.
+
+\end{thebibliography}
